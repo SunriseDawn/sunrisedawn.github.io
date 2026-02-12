@@ -171,150 +171,229 @@
 
 
 <body>
-	@require '../common/variables'
+	<div class="progress-bar-container">
+	
 
-.page-title-header
-  font-size 3.2rem
-  line-height 1
-  font-weight bold
-  color var(--second-text-color)
-  margin 6px 0 36px 0
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
 
-.page-container
-  position relative
-  box-sizing border-box
-  width 100%
-  height auto
-  background var(--background-color)
+<main class="page-container" id="swup">
 
-  +redefine-tablet()
-    padding-right 0 !important
+	
 
-  .main-content-container
-    padding-top $navbar-height
-    position relative
-    transition padding 0.2s ease
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                dawn&#39;s blog
+                
+            </a>
+        </div>
 
-    .navbar-shrink &
-      padding-top $navbar-shrink-height
-      transition padding 0.2s ease
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
 
-      +redefine-tablet()
-        padding-top: ($navbar-shrink-height * 0.9)
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
 
-      +redefine-mobile()
-        padding-top: $navbar-shrink-height * 0.8
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    +redefine-tablet()
-      padding-top: $navbar-height * 0.9
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
 
-    +redefine-mobile()
-      padding-top: $navbar-height * 0.8
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
 
-    .main-content-header
-      position fixed
-      top 0
-      right 0
-      width 100%
-      height $navbar-height
-      z-index $z-index-5
-      box-sizing border-box
-      transition-t('transform, padding-left, height', '0, 0, 0', '0.3, 0.2, 0.2', 'ease-out, linear, ease')
+                        
+                    </li>
+            
 
-      &.hide
-        transform translateY(-105%)
+            
+            
+        </ul>
 
-      .navbar-shrink &
-        height $navbar-shrink-height
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
 
-        +redefine-tablet()
-          height: ($navbar-shrink-height * 0.9)
+    <div class="window-mask"></div>
 
-        +redefine-mobile()
-          height: $navbar-shrink-height * 0.8
+</header>
 
-      +redefine-tablet()
-        height: $navbar-height * 0.9
-        padding-left 0 !important
 
-      +redefine-mobile()
-        height: $navbar-height * 0.8
+		</div>
 
-    .main-content-body
-      box-sizing border-box
-      width 100%
-      display flex
-      justify-content center
-      padding $spacing-unit 0
+		<div class="main-content-body transition-fade-up">
+			
 
-      +redefine-tablet()
-        padding ($spacing-unit * 0.8) 0
+			<div class="main-content">
+				<div class="nf-container">
+    <div class="nf-text">
+        <h1>404<br>Page Not Found</h1>
+    </div>
+    <div class="nf-button">
+        <a href="/" class="button large center"><i class="fa-regular fa-house"></i> Go Back Home</a>
+    </div>
+</div>
 
-      +redefine-mobile()
-        border none !important
-        padding-top 0
+			</div>
 
-      .main-content
-        position relative
-        box-sizing border-box
-        width $main-content-width
-        max-width $content-max-width
-        height 100%
-        transition-t('max-width, width', '0, 0', '0.2, 0.2', 'ease, ease')
+			
+		</div>
 
-        +redefine-tablet()
-          width $main-content-width-tablet
+	
 
-        +redefine-mobile()
-          width $main-content-width-mobile
+		
+		
+	</div>
 
-        &.has-toc
-          max-width $has-toc-content-max-width !important
+	
 
-      .main-content-footer
-        width 100%
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
 
-  .post-tools
-    position fixed
-    top: $navbar-height + $spacing-unit
-    right $spacing-unit
-    transition-t('top', '0', '0.2', 'ease')
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
 
-    .navbar-shrink &
-      top: $navbar-shrink-height + $spacing-unit
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
 
-      +redefine-tablet()
-        top ($navbar-shrink-height * 0.9) + $spacing-unit
+		<!-- rss -->
+		
 
-      +redefine-mobile()
-        top: ($navbar-shrink-height * 0.8 + $spacing-unit)
+		
 
-    +redefine-tablet()
-      top: ($navbar-height * 0.9 + $spacing-unit)
-      right 10px
-      transform scale(0.82)
-      transform-origin right top
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
 
-    +redefine-mobile()
-      display none
-      top: ($navbar-height * 0.8 + $spacing-unit)
-      right 5px
-      transform scale(0.72)
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
 
-  .right-side-tools-container
-    position fixed
-    bottom 5%
-    right $spacing-unit
-    opacity 1
-    transition opacity 0.2s ease
+	<div class="image-viewer-container">
+	<img src="">
+</div>
 
-    &.hide
-      opacity 0
-      pointer-events none
-      transition opacity 0.2s ease
+	
 
-    +redefine-mobile()
-      right 12px
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
 
 	
 <script src="/js/build/tools/imageViewer.js" type="module"></script>
