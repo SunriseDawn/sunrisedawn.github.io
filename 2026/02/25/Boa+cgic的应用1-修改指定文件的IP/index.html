@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="dawn">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://sunrisedawn.github.io/2026/02/25/boa+cgic的应用1-修改指定文件的ip/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Boa+cgic的应用1-修改指定文件的IP">
+<meta property="og:url" content="https://sunrisedawn.github.io/2026/02/25/Boa+cgic%E7%9A%84%E5%BA%94%E7%94%A81-%E4%BF%AE%E6%94%B9%E6%8C%87%E5%AE%9A%E6%96%87%E4%BB%B6%E7%9A%84IP/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sunrisedawn.github.io/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-02-25T08:20:04.385Z">
+<meta property="article:modified_time" content="2026-02-25T08:33:30.882Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sunrisedawn.github.io/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/linboli.jpg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/linboli.jpg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/linboli.jpg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Boa+cgic的应用1-修改指定文件的IP | dawn&#39;s blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"sunrisedawn.github.io","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":false,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":false,"site_pv":false,"site_uv":false,"post_pv":false},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"万象有序","subtitle":{"text":[],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                dawn&#39;s blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/tags/"
+                                        >
+                                    <i class="fa-solid fa-tags fa-fw"></i>
+                                    TAGS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/tags/"
+                        >
+                            <span>
+                                TAGS
+                            </span>
+                            
+                                <i class="fa-solid fa-tags fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Boa+cgic的应用1-修改指定文件的IP</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/linboli.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">dawn</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-02-25 16:20:04</span>
+        <span class="mobile">2026-02-25 16:20:04</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-02-25 16:33:30</span>
+            <span class="mobile">2026-02-25 16:33:30</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h2 id="1-要求"><a href="#1-要求" class="headerlink" title="1 要求"></a>1 要求</h2><p>对 etc&#x2F;rcd&#x2F;rc.local 文件中的ip进行修改</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">ifconfig eth0 up</span><br><span class="line">ifconfig eth1 up</span><br><span class="line">ifconfig eth0 192.168.2.232</span><br><span class="line">ifconfig eth1 192.168.1.232</span><br><span class="line">route add default gw 192.168.2.1</span><br><span class="line"></span><br><span class="line">sleep 5</span><br><span class="line"></span><br><span class="line">#mosquitto -c /etc/mosquitto/mosquitto.conf</span><br><span class="line">echo  0  &gt;  /sys/class/pwm/pwmchip0/export</span><br><span class="line">echo  250000  &gt;/sys/class/pwm/pwmchip0/pwm0/period</span><br><span class="line">echo  125000  &gt;/sys/class/pwm/pwmchip0/pwm0/duty_cycle</span><br><span class="line">echo  1  &gt; /sys/class/pwm/pwmchip0/pwm0/enable</span><br><span class="line">sleep 1</span><br><span class="line">echo  0  &gt; /sys/class/pwm/pwmchip0/pwm0/enable</span><br><span class="line">sleep 10</span><br><span class="line"></span><br><span class="line">cd /usr/app/collect</span><br><span class="line">sh app.sh</span><br><span class="line"></span><br><span class="line">cd /usr/app/vm</span><br><span class="line">sh app.sh</span><br><span class="line"></span><br><span class="line">cd /usr/app/sadp</span><br><span class="line">./sadp &amp;</span><br><span class="line"></span><br><span class="line">cd /usr/app/frp</span><br><span class="line">./frpc -c frpc.ini &amp;</span><br><span class="line"></span><br><span class="line">sleep 30</span><br><span class="line"></span><br><span class="line">ntpdate -u ntp1.aliyun.com &amp;&amp; hwclock -w</span><br><span class="line"></span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="2-modify-rc-local-c代码"><a href="#2-modify-rc-local-c代码" class="headerlink" title="2 modify_rc_local.c代码"></a>2 modify_rc_local.c代码</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;sys/stat.h&gt;</span><br><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;fcntl.h&gt;</span><br><span class="line">#include &lt;errno.h&gt;</span><br><span class="line">#include &lt;regex.h&gt;</span><br><span class="line"></span><br><span class="line">// rc.local文件路径</span><br><span class="line">#define RC_LOCAL_PATH &quot;/etc/rc.d/rc.local&quot;</span><br><span class="line">// 临时文件（使用进程ID保证唯一性）</span><br><span class="line">#define TMP_FILE_FORMAT &quot;/tmp/rc.local.tmp.%d&quot;</span><br><span class="line"></span><br><span class="line">// 存储提取的参数</span><br><span class="line">typedef struct &#123;</span><br><span class="line">    char eth0_ip[32];</span><br><span class="line">    char eth1_ip[32];</span><br><span class="line">    char gateway[32];</span><br><span class="line">&#125; RcParams;</span><br><span class="line"></span><br><span class="line">// 安全的字符串拷贝（防止溢出）</span><br><span class="line">static void safe_strcpy(char *dst, const char *src, size_t dst_size) &#123;</span><br><span class="line">    if (dst == NULL || src == NULL || dst_size == 0) return;</span><br><span class="line">    strncpy(dst, src, dst_size - 1);</span><br><span class="line">    dst[dst_size - 1] = &#x27;\0&#x27;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 解析POST参数（通用函数）</span><br><span class="line">void get_post_data(char *buffer, int buf_size) &#123;</span><br><span class="line">    if (buffer == NULL || buf_size &lt;= 1) &#123;</span><br><span class="line">        if (buffer) buffer[0] = &#x27;\0&#x27;;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    char *content_len = getenv(&quot;CONTENT_LENGTH&quot;);</span><br><span class="line">    if (!content_len) &#123;</span><br><span class="line">        buffer[0] = &#x27;\0&#x27;;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    long len = strtol(content_len, NULL, 10);</span><br><span class="line">    if (len &lt;= 0 || len &gt;= buf_size - 1) &#123;</span><br><span class="line">        buffer[0] = &#x27;\0&#x27;;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 安全读取POST数据</span><br><span class="line">    size_t read_len = fread(buffer, 1, (size_t)len, stdin);</span><br><span class="line">    buffer[read_len] = &#x27;\0&#x27;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 提取指定POST参数的值（安全版本）</span><br><span class="line">void get_param(const char *params, const char *key, char *value, int val_size) &#123;</span><br><span class="line">    if (params == NULL || key == NULL || value == NULL || val_size &lt;= 1) &#123;</span><br><span class="line">        if (value) value[0] = &#x27;\0&#x27;;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    value[0] = &#x27;\0&#x27;;</span><br><span class="line">    char *pos = strstr(params, key);</span><br><span class="line">    if (!pos) return;</span><br><span class="line"></span><br><span class="line">    pos += strlen(key) + 1; // 跳过key=</span><br><span class="line">    char *end = strstr(pos, &quot;&amp;&quot;);</span><br><span class="line">    size_t copy_len = end ? (size_t)(end - pos) : strlen(pos);</span><br><span class="line">    </span><br><span class="line">    // 限制拷贝长度，防止溢出</span><br><span class="line">    if (copy_len &gt;= (size_t)val_size) &#123;</span><br><span class="line">        copy_len = val_size - 1;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    strncpy(value, pos, copy_len);</span><br><span class="line">    value[copy_len] = &#x27;\0&#x27;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 验证IP合法性（使用正则表达式，更严谨）</span><br><span class="line">int is_valid_ip(const char *ip) &#123;</span><br><span class="line">    if (ip == NULL || strlen(ip) &gt; 15) return 0;</span><br><span class="line"></span><br><span class="line">    // IPv4 正则表达式：匹配 0-255.0-255.0-255.0-255，且无前置零（除了0本身）</span><br><span class="line">    const char *ip_pattern = </span><br><span class="line">        &quot;^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.)&#123;3&#125;&quot;</span><br><span class="line">        &quot;(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$&quot;;</span><br><span class="line">    </span><br><span class="line">    regex_t regex;</span><br><span class="line">    int ret = regcomp(&amp;regex, ip_pattern, REG_EXTENDED | REG_NOSUB);</span><br><span class="line">    if (ret != 0) return 0;</span><br><span class="line"></span><br><span class="line">    ret = regexec(&amp;regex, ip, 0, NULL, 0);</span><br><span class="line">    regfree(&amp;regex);</span><br><span class="line">    </span><br><span class="line">    return ret == 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 从rc.local中提取现有IP和网关</span><br><span class="line">void read_rc_params(RcParams *params) &#123;</span><br><span class="line">    if (params == NULL) return;</span><br><span class="line"></span><br><span class="line">    // 默认值（如果文件中没找到）</span><br><span class="line">    safe_strcpy(params-&gt;eth0_ip, &quot;192.168.2.232&quot;, sizeof(params-&gt;eth0_ip));</span><br><span class="line">    safe_strcpy(params-&gt;eth1_ip, &quot;192.168.1.232&quot;, sizeof(params-&gt;eth1_ip));</span><br><span class="line">    safe_strcpy(params-&gt;gateway, &quot;192.168.2.1&quot;, sizeof(params-&gt;gateway));</span><br><span class="line"></span><br><span class="line">    FILE *fp = fopen(RC_LOCAL_PATH, &quot;r&quot;);</span><br><span class="line">    if (!fp) return;</span><br><span class="line"></span><br><span class="line">    char line[1024]; // 增大缓冲区，避免行截断</span><br><span class="line">    while (fgets(line, sizeof(line), fp)) &#123;</span><br><span class="line">        // 去除换行符，避免干扰解析</span><br><span class="line">        char *nl = strchr(line, &#x27;\n&#x27;);</span><br><span class="line">        if (nl) *nl = &#x27;\0&#x27;;</span><br><span class="line"></span><br><span class="line">        // 提取eth0 IP</span><br><span class="line">        if (strstr(line, &quot;ifconfig eth0 &quot;) &amp;&amp; !strstr(line, &quot;up&quot;)) &#123;</span><br><span class="line">            sscanf(line, &quot;ifconfig eth0 %31s&quot;, params-&gt;eth0_ip);</span><br><span class="line">        &#125;</span><br><span class="line">        // 提取eth1 IP</span><br><span class="line">        else if (strstr(line, &quot;ifconfig eth1 &quot;) &amp;&amp; !strstr(line, &quot;up&quot;)) &#123;</span><br><span class="line">            sscanf(line, &quot;ifconfig eth1 %31s&quot;, params-&gt;eth1_ip);</span><br><span class="line">        &#125;</span><br><span class="line">        // 提取默认网关</span><br><span class="line">        else if (strstr(line, &quot;route add default gw &quot;)) &#123;</span><br><span class="line">            sscanf(line, &quot;route add default gw %31s&quot;, params-&gt;gateway);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    fclose(fp);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 替换rc.local中的IP和网关</span><br><span class="line">int modify_rc_params(const char *new_eth0, const char *new_eth1, const char *new_gw) &#123;</span><br><span class="line">    if (new_eth0 == NULL || new_eth1 == NULL || new_gw == NULL) return -1;</span><br><span class="line"></span><br><span class="line">    // 检查运行用户（必须是root）</span><br><span class="line">    if (getuid() != 0) &#123;</span><br><span class="line">        return -3; // 权限不足（非root）</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 创建唯一临时文件（使用PID避免冲突）</span><br><span class="line">    char tmp_file[64];</span><br><span class="line">    snprintf(tmp_file, sizeof(tmp_file), TMP_FILE_FORMAT, getpid());</span><br><span class="line"></span><br><span class="line">    // 打开原文件和临时文件</span><br><span class="line">    FILE *src_fp = fopen(RC_LOCAL_PATH, &quot;r&quot;);</span><br><span class="line">    FILE *tmp_fp = fopen(tmp_file, &quot;w&quot;);</span><br><span class="line">    if (!src_fp || !tmp_fp) &#123;</span><br><span class="line">        if (src_fp) fclose(src_fp);</span><br><span class="line">        if (tmp_fp) fclose(tmp_fp);</span><br><span class="line">        remove(tmp_file); // 清理临时文件</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 获取原文件权限</span><br><span class="line">    struct stat st;</span><br><span class="line">    mode_t orig_mode = 0755; // 默认权限</span><br><span class="line">    if (stat(RC_LOCAL_PATH, &amp;st) == 0) &#123;</span><br><span class="line">        orig_mode = st.st_mode &amp; 0777;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 逐行读取并替换（增大缓冲区）</span><br><span class="line">    char line[1024];</span><br><span class="line">    while (fgets(line, sizeof(line), src_fp)) &#123;</span><br><span class="line">        char *nl = strchr(line, &#x27;\n&#x27;);</span><br><span class="line">        if (!nl) &#123; // 处理超长行（无换行符）</span><br><span class="line">            line[sizeof(line)-1] = &#x27;\0&#x27;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 替换eth0 IP行</span><br><span class="line">        if (strstr(line, &quot;ifconfig eth0 &quot;) &amp;&amp; !strstr(line, &quot;up&quot;)) &#123;</span><br><span class="line">            fprintf(tmp_fp, &quot;ifconfig eth0 %s\n&quot;, new_eth0);</span><br><span class="line">        &#125;</span><br><span class="line">        // 替换eth1 IP行</span><br><span class="line">        else if (strstr(line, &quot;ifconfig eth1 &quot;) &amp;&amp; !strstr(line, &quot;up&quot;)) &#123;</span><br><span class="line">            fprintf(tmp_fp, &quot;ifconfig eth1 %s\n&quot;, new_eth1);</span><br><span class="line">        &#125;</span><br><span class="line">        // 替换网关行</span><br><span class="line">        else if (strstr(line, &quot;route add default gw &quot;)) &#123;</span><br><span class="line">            fprintf(tmp_fp, &quot;route add default gw %s\n&quot;, new_gw);</span><br><span class="line">        &#125;</span><br><span class="line">        // 其他行原样写入</span><br><span class="line">        else &#123;</span><br><span class="line">            fputs(line, tmp_fp);</span><br><span class="line">            if (!nl) fputs(&quot;\n&quot;, tmp_fp); // 补全换行符</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 关闭文件</span><br><span class="line">    fclose(src_fp);</span><br><span class="line">    fclose(tmp_fp);</span><br><span class="line"></span><br><span class="line">    // 替换原文件（先删除原文件，避免rename失败）</span><br><span class="line">    if (remove(RC_LOCAL_PATH) != 0 &amp;&amp; errno != ENOENT) &#123;</span><br><span class="line">        remove(tmp_file);</span><br><span class="line">        return -2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (rename(tmp_file, RC_LOCAL_PATH) != 0) &#123;</span><br><span class="line">        remove(tmp_file);</span><br><span class="line">        return -2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 恢复原文件权限</span><br><span class="line">    chmod(RC_LOCAL_PATH, orig_mode);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 生成网页页面（包含表单和回显）</span><br><span class="line">void generate_html(RcParams *params, const char *msg, int is_success) &#123;</span><br><span class="line">    if (params == NULL) return;</span><br><span class="line"></span><br><span class="line">    printf(&quot;Content-Type: text/html; charset=GBK\n\n&quot;);</span><br><span class="line">    printf(&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;zh-CN&#x27;&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;head&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;meta charset=&#x27;GBK&#x27;&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;title&gt;修改rc.local IP配置&lt;/title&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;style&gt;&quot;);</span><br><span class="line">    printf(&quot;body&#123;margin:20px;font-family:Arial;&#125;&quot;);</span><br><span class="line">    printf(&quot;.form-box&#123;width:500px;padding:20px;border:1px solid #ccc;border-radius:8px;&#125;&quot;);</span><br><span class="line">    printf(&quot;.form-item&#123;margin:15px 0;&#125;&quot;);</span><br><span class="line">    printf(&quot;label&#123;display:inline-block;width:120px;&#125;&quot;);</span><br><span class="line">    printf(&quot;input&#123;width:300px;padding:6px;&#125;&quot;);</span><br><span class="line">    printf(&quot;button&#123;padding:8px 20px;background:#008000;color:white;border:none;border-radius:4px;cursor:pointer;&#125;&quot;);</span><br><span class="line">    printf(&quot;.success&#123;color:green;margin:10px 0;&#125;&quot;);</span><br><span class="line">    printf(&quot;.error&#123;color:red;margin:10px 0;&#125;&quot;);</span><br><span class="line">    printf(&quot;&lt;/style&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;/head&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;body&gt;&lt;h1&gt;修改rc.local网络配置&lt;/h1&gt;&quot;);</span><br><span class="line">    </span><br><span class="line">    // 显示操作结果</span><br><span class="line">    if (msg &amp;&amp; strlen(msg) &gt; 0) &#123;</span><br><span class="line">        if (is_success) &#123;</span><br><span class="line">            printf(&quot;&lt;p class=&#x27;success&#x27;&gt;%s&lt;/p&gt;&quot;, msg);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            printf(&quot;&lt;p class=&#x27;error&#x27;&gt;%s&lt;/p&gt;&quot;, msg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 配置表单（转义特殊字符，防止XSS）</span><br><span class="line">    printf(&quot;&lt;div class=&#x27;form-box&#x27;&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;form action=&#x27;/cgi-bin/modify_rc_local.cgi&#x27; method=&#x27;POST&#x27;&gt;&quot;);</span><br><span class="line">    </span><br><span class="line">    printf(&quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;label&gt;eth0 IP：&lt;/label&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;input type=&#x27;text&#x27; name=&#x27;eth0_ip&#x27; value=&#x27;%s&#x27; required placeholder=&#x27;如192.168.2.232&#x27;&gt;&quot;, params-&gt;eth0_ip);</span><br><span class="line">    printf(&quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">    printf(&quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;label&gt;eth1 IP：&lt;/label&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;input type=&#x27;text&#x27; name=&#x27;eth1_ip&#x27; value=&#x27;%s&#x27; required placeholder=&#x27;如192.168.1.232&#x27;&gt;&quot;, params-&gt;eth1_ip);</span><br><span class="line">    printf(&quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">    printf(&quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;label&gt;默认网关：&lt;/label&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;input type=&#x27;text&#x27; name=&#x27;gateway&#x27; value=&#x27;%s&#x27; required placeholder=&#x27;如192.168.2.1&#x27;&gt;&quot;, params-&gt;gateway);</span><br><span class="line">    printf(&quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">    printf(&quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;button type=&#x27;submit&#x27;&gt;保存配置&lt;/button&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;button type=&#x27;button&#x27; onclick=&#x27;location.reload()&#x27; style=&#x27;background:#666;margin-left:10px;&#x27;&gt;刷新&lt;/button&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;/div&gt;&quot;);</span><br><span class="line">    printf(&quot;&lt;/form&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    RcParams params;</span><br><span class="line">    read_rc_params(&amp;params); // 读取现有配置</span><br><span class="line"></span><br><span class="line">    char *request_method = getenv(&quot;REQUEST_METHOD&quot;);</span><br><span class="line">    char msg[128] = &#123;0&#125;;</span><br><span class="line">    int is_success = 0;</span><br><span class="line"></span><br><span class="line">    // 处理POST提交（用户点击保存）</span><br><span class="line">    if (request_method &amp;&amp; strcmp(request_method, &quot;POST&quot;) == 0) &#123;</span><br><span class="line">        char post_params[1024] = &#123;0&#125;;</span><br><span class="line">        get_post_data(post_params, sizeof(post_params));</span><br><span class="line"></span><br><span class="line">        // 提取新参数</span><br><span class="line">        char new_eth0[32] = &#123;0&#125;, new_eth1[32] = &#123;0&#125;, new_gw[32] = &#123;0&#125;;</span><br><span class="line">        get_param(post_params, &quot;eth0_ip&quot;, new_eth0, sizeof(new_eth0));</span><br><span class="line">        get_param(post_params, &quot;eth1_ip&quot;, new_eth1, sizeof(new_eth1));</span><br><span class="line">        get_param(post_params, &quot;gateway&quot;, new_gw, sizeof(new_gw));</span><br><span class="line"></span><br><span class="line">        // 验证参数</span><br><span class="line">        if (!is_valid_ip(new_eth0) || !is_valid_ip(new_eth1) || !is_valid_ip(new_gw)) &#123;</span><br><span class="line">            safe_strcpy(msg, &quot;IP地址格式错误！请输入合法的IPv4地址&quot;, sizeof(msg));</span><br><span class="line">            is_success = 0;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // 替换rc.local中的参数</span><br><span class="line">            int ret = modify_rc_params(new_eth0, new_eth1, new_gw);</span><br><span class="line">            if (ret == 0) &#123;</span><br><span class="line">                safe_strcpy(msg, &quot;配置修改成功！重启设备后生效&quot;, sizeof(msg));</span><br><span class="line">                is_success = 1;</span><br><span class="line">                // 更新当前显示的参数</span><br><span class="line">                safe_strcpy(params.eth0_ip, new_eth0, sizeof(params.eth0_ip));</span><br><span class="line">                safe_strcpy(params.eth1_ip, new_eth1, sizeof(params.eth1_ip));</span><br><span class="line">                safe_strcpy(params.gateway, new_gw, sizeof(params.gateway));</span><br><span class="line">            &#125; else if (ret == -1) &#123;</span><br><span class="line">                safe_strcpy(msg, &quot;修改失败：无法打开文件（权限不足）&quot;, sizeof(msg));</span><br><span class="line">                is_success = 0;</span><br><span class="line">            &#125; else if (ret == -2) &#123;</span><br><span class="line">                safe_strcpy(msg, &quot;修改失败：文件替换出错&quot;, sizeof(msg));</span><br><span class="line">                is_success = 0;</span><br><span class="line">            &#125; else if (ret == -3) &#123;</span><br><span class="line">                safe_strcpy(msg, &quot;修改失败：需要root权限运行&quot;, sizeof(msg));</span><br><span class="line">                is_success = 0;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 生成网页</span><br><span class="line">    generate_html(&amp;params, msg, is_success);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="3-指令步骤"><a href="#3-指令步骤" class="headerlink" title="3 指令步骤"></a>3 指令步骤</h2><p>生成cgi文件，在cgi-bin文件中</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gcc modify_rc_local.c -o modify_rc_local.cgi</span><br></pre></td></tr></table></figure></div>
+
+<p>赋予权限</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod +777 modify_rc_local.cgi </span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chown root:root modify_rc_local.cgi </span><br></pre></td></tr></table></figure></div>
+
+<p>重新启动boa，在boa文件中</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ps -e</span><br><span class="line">sudo kill -9 端口号</span><br><span class="line">sudo ./boa</span><br></pre></td></tr></table></figure></div>
+
+
+		</div>
+
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/02/25/Boa+cgic%E9%83%A8%E7%BD%B2%E6%B5%81%E7%A8%8B2/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">Boa+cgic部署流程2</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">Boa+cgic的应用1-修改指定文件的IP</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%A6%81%E6%B1%82"><span class="nav-text">1 要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-modify-rc-local-c%E4%BB%A3%E7%A0%81"><span class="nav-text">2 modify_rc_local.c代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%8C%87%E4%BB%A4%E6%AD%A5%E9%AA%A4"><span class="nav-text">3 指令步骤</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+		
+
+    
+		
+		
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>
