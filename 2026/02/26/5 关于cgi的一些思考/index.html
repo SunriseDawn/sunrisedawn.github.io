@@ -77,7 +77,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://sunrisedawn.github.io/2026/02/24/2 boa+cgic部署流程1/"/>
+    <link rel="canonical" href="https://sunrisedawn.github.io/2026/02/26/5 关于cgi的一些思考/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -87,16 +87,16 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Boa+cgic部署流程1">
-<meta property="og:url" content="https://sunrisedawn.github.io/2026/02/24/2%20Boa+cgic%E9%83%A8%E7%BD%B2%E6%B5%81%E7%A8%8B1/index.html">
+<meta property="og:title" content="关于cgi的一些思考">
+<meta property="og:url" content="https://sunrisedawn.github.io/2026/02/26/5%20%E5%85%B3%E4%BA%8Ecgi%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sunrisedawn.github.io/images/redefine-og.webp">
-<meta property="article:published_time" content="2026-02-24T08:33:57.963Z">
-<meta property="article:modified_time" content="2026-02-25T07:52:31.619Z">
+<meta property="article:published_time" content="2026-02-26T02:11:55.245Z">
+<meta property="article:modified_time" content="2026-02-26T02:14:59.855Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="教程">
+<meta property="article:tag" content="思考">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sunrisedawn.github.io/images/redefine-og.webp">
     
@@ -110,7 +110,7 @@
     
     <title>
         
-            Boa+cgic部署流程1 | dawn&#39;s blog
+            关于cgi的一些思考 | dawn&#39;s blog
         
     </title>
 
@@ -336,7 +336,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Boa+cgic部署流程1</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">关于cgi的一些思考</h1>
 			</div>
 			
 		</div>
@@ -355,15 +355,15 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2026-02-24 16:33:57</span>
-        <span class="mobile">2026-02-24 16:33:57</span>
+        <span class="desktop">2026-02-26 10:11:55</span>
+        <span class="mobile">2026-02-26 10:11:55</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-02-25 15:52:31</span>
-            <span class="mobile">2026-02-25 15:52:31</span>
+            <span class="desktop">2026-02-26 10:14:59</span>
+            <span class="mobile">2026-02-26 10:14:59</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -375,7 +375,7 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
+                        <a href="/tags/%E6%80%9D%E8%80%83/">思考</a>&nbsp;
                     </li>
                 
             </ul>
@@ -397,70 +397,7 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h2 id="1-准备资料"><a href="#1-准备资料" class="headerlink" title="1 准备资料"></a>1 准备资料</h2><p>boa官网下载源码</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.boa.org/</span><br></pre></td></tr></table></figure></div>
-
-
-
-<h2 id="2-流程"><a href="#2-流程" class="headerlink" title="2 流程"></a>2 流程</h2><h3 id="2-1-新建文件"><a href="#2-1-新建文件" class="headerlink" title="2.1 新建文件"></a>2.1 新建文件</h3><p>指定目录创建3个文件boa，log，www。文件内容如下</p>
-<p><strong>boa：</strong>boa.conf 和  boa 和 boa_indexer (<strong>由boa源码复制而来</strong>)</p>
-<p><strong>log：</strong>error_log和access_log (<strong>新建</strong>)</p>
-<p><strong>www：</strong>cgi-bin 和 index.html (<strong>新建</strong>)</p>
-<h3 id="2-2-工具安装"><a href="#2-2-工具安装" class="headerlink" title="2.2 工具安装"></a>2.2 工具安装</h3><p>bison和flex</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install bison flex</span><br></pre></td></tr></table></figure></div>
-
-
-
-<h3 id="2-3-解压源码-执行配置文件"><a href="#2-3-解压源码-执行配置文件" class="headerlink" title="2.3 解压源码 执行配置文件"></a>2.3 解压源码 执行配置文件</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf boa-0.94.13.tar.gz</span><br></pre></td></tr></table></figure></div>
-
-<p>在src目录中执行配置文件</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br></pre></td></tr></table></figure></div>
-
-
-
-<h3 id="2-4文件修改"><a href="#2-4文件修改" class="headerlink" title="2.4文件修改"></a>2.4文件修改</h3><p>以下文件都在<strong>src</strong>中</p>
-<p><strong>(1) defines.h</strong></p>
-<p>将 #define SERVER_ROOT “&#x2F;boa”修改为自己新建的boa目录</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#define SERVER_ROOT &quot;xxx&quot;</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>(2) boa.c</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim boa.c +225</span><br><span class="line">注释下面内容</span><br><span class="line">226  if (setuid(0) != -1) &#123;</span><br><span class="line">227      DIE(&quot;icky Linux kernel bug!&quot;);</span><br><span class="line">228    &#125;</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>(3) compat.h</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim compat.h +120</span><br><span class="line">#define TIMEZONE_OFFSET(foo) (foo)-&gt;tm_gmtoff        //修改成这个</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>(4) log.c</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vim log.c +71</span><br><span class="line">注释掉下面</span><br><span class="line">/* redirect stderr to error_log */</span><br><span class="line">/*</span><br><span class="line">if (dup2(error_log, STDERR_FILENO) == -1) &#123;</span><br><span class="line">DIE(&quot;unable to dup2 the error log&quot;);</span><br><span class="line">&#125;</span><br><span class="line">*/</span><br></pre></td></tr></table></figure></div>
-
-<p>修改log.c之后make报链接错误</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ld: log.o:/home/zz/boaWork/boa-0.94.13/src/log.c:31: multiple definition of `cgi_log_name&#x27;; config.o:/home/zz/boaWork/boa-0.94.13/src/config.c:63: first defined here</span><br><span class="line">collect2: error: ld returned 1 exit status</span><br><span class="line">make: *** [Makefile:43: boa] Error 1</span><br></pre></td></tr></table></figure></div>
-
-<p>在代码3个变量前面加<code>extern</code>声明</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">extern char *error_log_name;</span><br><span class="line">extern char *access_log_name;</span><br><span class="line">extern char *cgi_log_name;</span><br></pre></td></tr></table></figure></div>
-
-
-
-<h3 id="2-5编译"><a href="#2-5编译" class="headerlink" title="2.5编译"></a>2.5编译</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure></div>
-
-<p>复制下面文件到自己创建的boa文件</p>
-<p>src下的 boa和boa_indexer</p>
-<p>boa-0.91.13下的boa.conf</p>
-<h3 id="2-6修改复制后的boa-conf"><a href="#2-6修改复制后的boa-conf" class="headerlink" title="2.6修改复制后的boa.conf"></a>2.6修改复制后的boa.conf</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">User 0</span><br><span class="line">Group 0</span><br><span class="line"></span><br><span class="line">ErroLog  /xxx/xxx/xxx   //error_log文件路径</span><br><span class="line"></span><br><span class="line">AccessLog  /xxx/xxx/xxx   //access_log文件路径</span><br><span class="line"></span><br><span class="line">DocumentRoot      ....     //www文件路径</span><br><span class="line"></span><br><span class="line">DirectoryMaker   ...        //boa_indexer文件路径</span><br><span class="line"></span><br><span class="line">ScriptAlias  /cgi-bin/  /home/xxx/boa/www/cgi-bin/   // 第一个不变，第二个为cgi-bin路径</span><br></pre></td></tr></table></figure></div>
-
-
-
-<h3 id="2-7-运行boa服务器"><a href="#2-7-运行boa服务器" class="headerlink" title="2.7 运行boa服务器"></a>2.7 运行boa服务器</h3><p>在自己新建的boa目录执行</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo  ./boa</span><br></pre></td></tr></table></figure></div>
-
-
-
-<h3 id="2-8-测试boa服务器"><a href="#2-8-测试boa服务器" class="headerlink" title="2.8 测试boa服务器"></a>2.8 测试boa服务器</h3><p>编写index.html保存在www目录之下</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;! DOCTYPE&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">	&lt;head&gt;</span><br><span class="line">	&lt;title&gt; hello &lt;/title&gt;</span><br><span class="line">	&lt;/head&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;body&gt; hello world!!! &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></div>
-
-<p>在浏览器输入ip地址</p>
-<h3 id="附"><a href="#附" class="headerlink" title="附"></a>附</h3><p>参考：</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.bilibili.com/video/BV1Hj411y7wk/?spm_id_from=333.337.search-card.all.click</span><br></pre></td></tr></table></figure></div>
-
+			<h2 id="1-CGI"><a href="#1-CGI" class="headerlink" title="1 CGI"></a>1 CGI</h2><p>通用网关接口：<strong>Common Gateway Interface</strong></p>
 
 		</div>
 
@@ -470,7 +407,7 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>&nbsp;
+				<a href="/tags/%E6%80%9D%E8%80%83/">#思考</a>&nbsp;
 			</li>
 			
 		</ul>
@@ -481,23 +418,11 @@
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2026/02/25/3%20Boa+cgic%E9%83%A8%E7%BD%B2%E6%B5%81%E7%A8%8B2/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">Boa+cgic部署流程2</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2026/02/11/1%20%E7%BD%91%E7%AB%99%E9%83%A8%E7%BD%B2%E7%9B%B8%E5%85%B3/">
+				<a class="next" rel="next" href="/2026/02/25/4%20Boa+cgic%E7%9A%84%E5%BA%94%E7%94%A81-%E4%BF%AE%E6%94%B9%E6%8C%87%E5%AE%9A%E6%96%87%E4%BB%B6%E7%9A%84IP/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">网站部署相关</span>
+						<span class="post-nav-title-item truncate max-w-48">Boa+cgic的应用1-修改指定文件的IP</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -518,8 +443,8 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">Boa+cgic部署流程1</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%87%86%E5%A4%87%E8%B5%84%E6%96%99"><span class="nav-text">1 准备资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%B5%81%E7%A8%8B"><span class="nav-text">2 流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6"><span class="nav-text">2.1 新建文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85"><span class="nav-text">2.2 工具安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%A7%A3%E5%8E%8B%E6%BA%90%E7%A0%81-%E6%89%A7%E8%A1%8C%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-text">2.3 解压源码 执行配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4%E6%96%87%E4%BB%B6%E4%BF%AE%E6%94%B9"><span class="nav-text">2.4文件修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5%E7%BC%96%E8%AF%91"><span class="nav-text">2.5编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6%E4%BF%AE%E6%94%B9%E5%A4%8D%E5%88%B6%E5%90%8E%E7%9A%84boa-conf"><span class="nav-text">2.6修改复制后的boa.conf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-%E8%BF%90%E8%A1%8Cboa%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-text">2.7 运行boa服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-8-%E6%B5%8B%E8%AF%95boa%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-text">2.8 测试boa服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%84"><span class="nav-text">附</span></a></li></ol></li></ol>
+		<div class="page-title">关于cgi的一些思考</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-CGI"><span class="nav-text">1 CGI</span></a></li></ol>
 
 	</div>
 </div>
