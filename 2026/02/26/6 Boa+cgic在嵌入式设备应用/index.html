@@ -100,7 +100,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sunrisedawn.github.io/images/redefine-og.webp">
 <meta property="article:published_time" content="2026-02-26T08:19:18.433Z">
-<meta property="article:modified_time" content="2026-02-27T06:07:48.867Z">
+<meta property="article:modified_time" content="2026-02-27T06:17:18.846Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="教程">
 <meta name="twitter:card" content="summary">
@@ -352,8 +352,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-02-27 14:07:48</span>
-            <span class="mobile">2026-02-27 14:07:48</span>
+            <span class="desktop">2026-02-27 14:17:18</span>
+            <span class="mobile">2026-02-27 14:17:18</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -388,23 +388,26 @@
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
 			<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h2><p>前面在VMware中linux系统正常运行boa服务器以及cgi程序正常。</p>
-<p>下面是在嵌入式设备中的应用</p>
+<p>下面是在嵌入式设备中FCU1104的应用</p>
+<p>交叉工具链之前装好了</p>
+<p>arm-poky-linux-gnueabi-gcc</p>
 <h3 id="2-交叉编译"><a href="#2-交叉编译" class="headerlink" title="2 交叉编译"></a>2 交叉编译</h3><h3 id="2-1-编译boa"><a href="#2-1-编译boa" class="headerlink" title="2.1 编译boa"></a>2.1 编译boa</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 先清理之前的编译残留（如果有）</span><br><span class="line">make clean</span><br></pre></td></tr></table></figure></div>
 
-<p><strong>但接下来make时总是出现错误，crtend.o&#x2F;crtn.o<code>缺失问题后，又出现了</code>cannot find -lc<code>的报错（找不到 C 标准库</code>libc)</strong></p>
+<p><strong>但接下来make时总是出现错误，crtend.o&#x2F;crtn.o缺失问题后，又出现了cannot find -lc的报错（找不到 C 标准库libc)</strong></p>
 <p>需要修改makefile文件，内容全部替换到如下</p>
 <div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"># BOA Makefile for NXP i.MX (arm-poky-linux-gnueabi-gcc)</span><br><span class="line">CC = /opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/x86_64-pokysdk-linux/usr/bin/arm-poky-linux-gnueabi/arm-poky-linux-gnueabi-gcc</span><br><span class="line">CFLAGS = -g -O2 -pipe -Wall -I. \</span><br><span class="line">         --sysroot=/opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/cortexa7hf-neon-poky-linux-gnueabi \</span><br><span class="line">         -march=armv7-a -mfpu=neon -mfloat-abi=hard -mtune=cortex-a7</span><br><span class="line">LDFLAGS = --sysroot=/opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/cortexa7hf-neon-poky-linux-gnueabi</span><br><span class="line"></span><br><span class="line"># 依赖文件（无需修改）</span><br><span class="line">OBJS = y.tab.o lex.yy.o alias.o boa.o buffer.o cgi.o cgi_header.o \</span><br><span class="line">       config.o escape.o get.o hash.o ip.o log.o mmap_cache.o pipe.o \</span><br><span class="line">       queue.o read.o request.o response.o select.o signals.o util.o \</span><br><span class="line">       sublog.o timestamp.o</span><br><span class="line"></span><br><span class="line"># 目标编译规则</span><br><span class="line">boa: $(OBJS)</span><br><span class="line">	$(CC) $(CFLAGS) $(LDFLAGS) -o boa $(OBJS)</span><br><span class="line"></span><br><span class="line"># 语法解析文件生成规则</span><br><span class="line">y.tab.c y.tab.h: boa_grammar.y</span><br><span class="line">	bison -y -d boa_grammar.y</span><br><span class="line"></span><br><span class="line">lex.yy.c: boa_lexer.l</span><br><span class="line">	flex boa_lexer.l</span><br><span class="line"></span><br><span class="line"># 通用编译规则</span><br><span class="line">.c.o:</span><br><span class="line">	$(CC) $(CFLAGS) -c $&lt; -o $@</span><br><span class="line"></span><br><span class="line"># 清理规则</span><br><span class="line">clean:</span><br><span class="line">	rm -f $(OBJS) boa y.tab.c y.tab.h lex.yy.c core *~</span><br></pre></td></tr></table></figure></div>
 
 <p>上面MakeFIle文件解释说明：</p>
 <p><strong>修改一</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#告诉编译器「放弃找主机的库，去这个路径找 ARM 架构的库」—— 这个路径是 NXP 为 i.MX 设备预置的「目标系统根文件系统」，里面包含完整的 ARM 架构crtend.o/crtn.o/libc.so等文件，编译器能精准找到所需的链接文件，解决了第一个核心报错。</span><br><span class="line">--sysroot=/opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/cortexa7hf-neon-poky-linux-gnueabi</span><br></pre></td></tr></table></figure></div>
+<p>告诉编译器「放弃找主机的库，去这个路径找 ARM 架构的库」—— 这个路径是 NXP 为 i.MX 设备预置的「目标系统根文件系统」，<br>里面包含完整的 ARM 架构crtend.o&#x2F;crtn.o&#x2F;libc.so等文件。</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--sysroot=/opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/cortexa7hf-neon-poky-linux-gnueabi</span><br></pre></td></tr></table></figure></div>
 
 <p><strong>修改2</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#如果只指定--sysroot但不指定架构参数，编译器会用默认的 ARM 架构（如 armv5）编译，而 NXP i.MX6/7 是 Cortex-A7（armv7-a）硬浮点架构，编译出的代码会和设备的 CPU 不兼容（比如指令集错误），甚至链接时出现隐性报错。</span><br><span class="line">-march=armv7-a -mfpu=neon -mfloat-abi=hard -mtune=cortex-a7</span><br></pre></td></tr></table></figure></div>
+<p>#如果只指定–sysroot但不指定架构参数，编译器会用默认的 ARM 架构（如 armv5）编译，而 NXP i.MX6&#x2F;7 是 Cortex-A7（armv7-a）硬浮点架构，编译出的代码会和设备的 CPU 不兼容（比如指令集错误），甚至链接时出现隐性报错。</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-march=armv7-a -mfpu=neon -mfloat-abi=hard -mtune=cortex-a7</span><br></pre></td></tr></table></figure></div>
 
 <p><strong>修改3</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">彻底移除了-static参数，改用「动态编译」：</span><br><span class="line">动态编译只需要链接「动态 C 库（libc.so）」，而 NXP 的 sysroot 中默认包含libc.so，链接器能直接找到；</span><br><span class="line">动态编译是 NXP i.MX 设备的「标配方式」（原厂根文件系统自带动态库环境），无需额外补充静态库，避开了最棘手的静态库缺失问题。</span><br></pre></td></tr></table></figure></div>
-
+<p>彻底移除了-static参数，改用「动态编译」：<br>动态编译只需要链接「动态 C 库（libc.so）」，而 NXP 的 sysroot 中默认包含libc.so，链接器能直接找到；<br>动态编译是 NXP i.MX 设备的「标配方式」（原厂根文件系统自带动态库环境），无需额外补充静态库，避开了最棘手的静态库缺失问题。</p>
 <p><strong>make</strong></p>
 <div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make clean</span><br><span class="line">make</span><br></pre></td></tr></table></figure></div>
 
