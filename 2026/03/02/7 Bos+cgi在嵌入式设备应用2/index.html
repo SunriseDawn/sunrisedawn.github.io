@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="dawn">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+            <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://sunrisedawn.github.io/2026/03/02/7 bos+cgi在嵌入式设备应用2/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="dawn&#39;s blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Boa+cgic在嵌入式设备应用2-sensor配置">
+<meta property="og:url" content="https://sunrisedawn.github.io/2026/03/02/7%20Bos+cgi%E5%9C%A8%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%AE%BE%E5%A4%87%E5%BA%94%E7%94%A82/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="dawn&#39;s blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sunrisedawn.github.io/images/eva1.png">
+<meta property="article:published_time" content="2026-03-02T01:31:45.871Z">
+<meta property="article:modified_time" content="2026-03-02T09:26:14.497Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sunrisedawn.github.io/images/eva1.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/linboli.jpg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/linboli.jpg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/linboli.jpg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Boa+cgic在嵌入式设备应用2-sensor配置 | dawn&#39;s blog
+        
+    </title>
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"sunrisedawn.github.io","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":false,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":false,"site_pv":false,"site_uv":false,"post_pv":false},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/eva1.png","description":"dawn's blog"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"万象有序","subtitle":{"text":[],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"},"Categories":{"icon":"fa-solid fa-folder","path":"/categories/"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                dawn&#39;s blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/tags/"
+                                        >
+                                    <i class="fa-solid fa-tags fa-fw"></i>
+                                    TAGS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/"
+                                        >
+                                    <i class="fa-solid fa-folder fa-fw"></i>
+                                    CATEGORIES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/tags/"
+                        >
+                            <span>
+                                TAGS
+                            </span>
+                            
+                                <i class="fa-solid fa-tags fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/"
+                        >
+                            <span>
+                                CATEGORIES
+                            </span>
+                            
+                                <i class="fa-solid fa-folder fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Boa+cgic在嵌入式设备应用2-sensor配置</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/linboli.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">dawn</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-03-02 09:31:45</span>
+        <span class="mobile">2026-03-02 09:31:45</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-03-02 17:26:14</span>
+            <span class="mobile">2026-03-02 17:26:14</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<p>在VMware-Linux中，编译cgic文件。要求能读取并且修改sensor.json文件。</p>
+<h2 id="1-中文乱码问题"><a href="#1-中文乱码问题" class="headerlink" title="1 中文乱码问题"></a>1 中文乱码问题</h2><p>修改原sensor.c文件编码格式，在文件sensor.c各种设置UTF-8都不管用</p>
+<p>但是设置成GBK就不乱码</p>
+<h2 id="2-CGIC"><a href="#2-CGIC" class="headerlink" title="2 CGIC"></a>2 CGIC</h2><h3 id="2-1部署"><a href="#2-1部署" class="headerlink" title="2.1部署"></a>2.1部署</h3><p>官网下载文件并且解压</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/boutell/cgic?tab=readme-ov-file</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure></div>
+
+<p>执行成功后，在当前目录看到这些文件：</p>
+<ul>
+<li><p><code>libcgic.a</code>：CGIC 的核心静态库（后续编译自己的 CGI 程序需要链接这个库）</p>
+</li>
+<li><p><code>cgictest.cgi</code>：官方自带的测试 CGI 程序</p>
+</li>
+<li><p><code>cgic.o</code>、<code>cgictest.o</code>等：编译过程中生成的目标文件</p>
+</li>
+</ul>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo make install</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="2-2-测试"><a href="#2-2-测试" class="headerlink" title="2.2 测试"></a>2.2 测试</h3><p>官网自带了cgictest.cgi文件，赋予权限，然后浏览器查看此页面。</p>
+<h2 id="3-编译sensor-c在VMware"><a href="#3-编译sensor-c在VMware" class="headerlink" title="3 编译sensor.c在VMware"></a>3 编译sensor.c在VMware</h2><h3 id="3-1-sensor-json"><a href="#3-1-sensor-json" class="headerlink" title="3.1 sensor.json"></a>3.1 sensor.json</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;TYPE&quot;: [4,2,5,0,0],</span><br><span class="line">	&quot;PARAMS&quot;: [</span><br><span class="line">		&#123;</span><br><span class="line">			&quot;WAY&quot;: 1,</span><br><span class="line">			&quot;TCP&quot;: &#123;</span><br><span class="line">				&quot;IP&quot;: &quot;192.168.1.105&quot;,</span><br><span class="line">				&quot;PORT&quot;: 8886</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;USART&quot;: &#123;</span><br><span class="line">				&quot;CHN&quot;: 1,</span><br><span class="line">				&quot;BAUD&quot;: 9600,</span><br><span class="line">				&quot;PARITY&quot;: 0</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;FREQ&quot;: 5,</span><br><span class="line">			&quot;ADDR&quot;: [1,2,3,4,5,6,7,8],</span><br><span class="line">			&quot;ECODE&quot;: [&quot;ZMDQ-INC-P05-01&quot;,&quot;ZMDQ-INC-P05-02&quot;,&quot;ZMDQ-INC-P04-01&quot;,&quot;ZMDQ-INC-P04-02&quot;,&quot;ZMDQ-INC-P03-02&quot;,&quot;ZMDQ-INC-P03-01&quot;,&quot;ZMDQ-INC-P02-01&quot;,&quot;ZMDQ-INC-P02-02&quot;],</span><br><span class="line">			&quot;INITVAL&quot;: [-0.30,0.29,10.00,0.14,-0.70,10.00,0.25,0.09,10.00,0.49,-0.75,10.00,0.01,-0.44,10.00,-0.24,0.12,10.00,-0.24,0.26,10.00,0.55,-0.79,10.00],</span><br><span class="line">			&quot;NUM&quot;: 8</span><br><span class="line">		&#125;,</span><br><span class="line">		&#123;</span><br><span class="line">			&quot;WAY&quot;: 0,</span><br><span class="line">			&quot;TCP&quot;: &#123;</span><br><span class="line">				&quot;IP&quot;: &quot;192.168.3.124&quot;,</span><br><span class="line">				&quot;PORT&quot;: 6677</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;USART&quot;: &#123;</span><br><span class="line">				&quot;CHN&quot;: 1,</span><br><span class="line">				&quot;BAUD&quot;: 9600,</span><br><span class="line">				&quot;PARITY&quot;: 0</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;FREQ&quot;: 2,</span><br><span class="line">			&quot;ADDR&quot;: [1],</span><br><span class="line">			&quot;ECODE&quot;: [&quot;ZMDQ-RTS-G01-01&quot;],</span><br><span class="line">			&quot;INITVAL&quot;: [10.00,10.00,0.00],</span><br><span class="line">			&quot;NUM&quot;: 1</span><br><span class="line">		&#125;,</span><br><span class="line">		&#123;</span><br><span class="line">			&quot;WAY&quot;: 1,</span><br><span class="line">			&quot;TCP&quot;: &#123;</span><br><span class="line">				&quot;IP&quot;: &quot;192.168.1.231&quot;,</span><br><span class="line">				&quot;PORT&quot;: 2311</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;USART&quot;: &#123;</span><br><span class="line">				&quot;CHN&quot;: 2,</span><br><span class="line">				&quot;BAUD&quot;: 9600,</span><br><span class="line">				&quot;PARITY&quot;: 0</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;FREQ&quot;: 2,</span><br><span class="line">			&quot;ADDR&quot;: [1],</span><br><span class="line">			&quot;ECODE&quot;: [&quot;ZMDQ-WLI-G01-01&quot;],</span><br><span class="line">			&quot;INITVAL&quot;: [10.00,0.00,0.00],</span><br><span class="line">			&quot;NUM&quot;: 1</span><br><span class="line">		&#125;,</span><br><span class="line">		&#123;</span><br><span class="line">			&quot;WAY&quot;: 0,</span><br><span class="line">			&quot;TCP&quot;: &#123;</span><br><span class="line">				&quot;IP&quot;: &quot;192.168.2.151&quot;,</span><br><span class="line">				&quot;PORT&quot;: 61513</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;USART&quot;: &#123;</span><br><span class="line">				&quot;CHN&quot;: 3,</span><br><span class="line">				&quot;BAUD&quot;: 9600,</span><br><span class="line">				&quot;PARITY&quot;: 0</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;FREQ&quot;: 2,</span><br><span class="line">			&quot;ADDR&quot;: [1,2],</span><br><span class="line">			&quot;ECODE&quot;: [&quot;ZMDQ-DIS-P01-01&quot;,&quot;ZMDQ-DIS-P01-02&quot;],</span><br><span class="line">			&quot;INITVAL&quot;: [33089.67,33104.85,0.00,0.00,0.00,0.00],</span><br><span class="line">			&quot;NUM&quot;: 2</span><br><span class="line">		&#125;,</span><br><span class="line">		&#123;</span><br><span class="line">			&quot;WAY&quot;: 0,</span><br><span class="line">			&quot;TCP&quot;: &#123;</span><br><span class="line">				&quot;IP&quot;: &quot;192.168.2.151&quot;,</span><br><span class="line">				&quot;PORT&quot;: 61513</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;USART&quot;: &#123;</span><br><span class="line">				&quot;CHN&quot;: 4,</span><br><span class="line">				&quot;BAUD&quot;: 9600,</span><br><span class="line">				&quot;PARITY&quot;: 0</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;FREQ&quot;: 2,</span><br><span class="line">			&quot;ADDR&quot;: [1,2],</span><br><span class="line">			&quot;ECODE&quot;: [&quot;ZMDQ-DIS-P06-02&quot;,&quot;ZMDQ-DIS-P06-03&quot;],</span><br><span class="line">			&quot;INITVAL&quot;: [33065.68,33170.03,0.00,0.00,0.00,0.00],</span><br><span class="line">			&quot;NUM&quot;: 2</span><br><span class="line">		&#125;</span><br><span class="line">	],</span><br><span class="line">	&quot;camera&quot;: [],</span><br><span class="line">	&quot;yb&quot;: &#123;</span><br><span class="line">		&quot;PORT&quot;: 7788,</span><br><span class="line">		&quot;FREQ&quot;: 1,</span><br><span class="line">		&quot;NUM&quot;: 6,</span><br><span class="line">		&quot;ECODE&quot;: [],</span><br><span class="line">		&quot;INITVAL&quot;: []</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="3-2-sensor-c文件"><a href="#3-2-sensor-c文件" class="headerlink" title="3.2 sensor.c文件"></a>3.2 sensor.c文件</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br><span class="line">622</span><br><span class="line">623</span><br><span class="line">624</span><br><span class="line">625</span><br><span class="line">626</span><br><span class="line">627</span><br><span class="line">628</span><br><span class="line">629</span><br><span class="line">630</span><br><span class="line">631</span><br><span class="line">632</span><br><span class="line">633</span><br><span class="line">634</span><br><span class="line">635</span><br><span class="line">636</span><br><span class="line">637</span><br><span class="line">638</span><br><span class="line">639</span><br><span class="line">640</span><br><span class="line">641</span><br><span class="line">642</span><br><span class="line">643</span><br><span class="line">644</span><br><span class="line">645</span><br><span class="line">646</span><br><span class="line">647</span><br><span class="line">648</span><br><span class="line">649</span><br><span class="line">650</span><br><span class="line">651</span><br><span class="line">652</span><br><span class="line">653</span><br><span class="line">654</span><br><span class="line">655</span><br><span class="line">656</span><br><span class="line">657</span><br><span class="line">658</span><br><span class="line">659</span><br><span class="line">660</span><br><span class="line">661</span><br><span class="line">662</span><br><span class="line">663</span><br><span class="line">664</span><br><span class="line">665</span><br><span class="line">666</span><br><span class="line">667</span><br><span class="line">668</span><br><span class="line">669</span><br><span class="line">670</span><br><span class="line">671</span><br><span class="line">672</span><br><span class="line">673</span><br><span class="line">674</span><br><span class="line">675</span><br><span class="line">676</span><br><span class="line">677</span><br><span class="line">678</span><br><span class="line">679</span><br><span class="line">680</span><br><span class="line">681</span><br><span class="line">682</span><br><span class="line">683</span><br><span class="line">684</span><br><span class="line">685</span><br><span class="line">686</span><br><span class="line">687</span><br><span class="line">688</span><br><span class="line">689</span><br><span class="line">690</span><br><span class="line">691</span><br><span class="line">692</span><br><span class="line">693</span><br><span class="line">694</span><br><span class="line">695</span><br><span class="line">696</span><br><span class="line">697</span><br><span class="line">698</span><br><span class="line">699</span><br><span class="line">700</span><br><span class="line">701</span><br><span class="line">702</span><br><span class="line">703</span><br><span class="line">704</span><br><span class="line">705</span><br><span class="line">706</span><br><span class="line">707</span><br><span class="line">708</span><br><span class="line">709</span><br><span class="line">710</span><br><span class="line">711</span><br><span class="line">712</span><br><span class="line">713</span><br><span class="line">714</span><br><span class="line">715</span><br><span class="line">716</span><br><span class="line">717</span><br><span class="line">718</span><br><span class="line">719</span><br><span class="line">720</span><br><span class="line">721</span><br><span class="line">722</span><br><span class="line">723</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;sys/stat.h&gt;</span><br><span class="line">#include &quot;cgic.h&quot;</span><br><span class="line"></span><br><span class="line">// ====================== 配置定义 ======================</span><br><span class="line">#define CONFIG_PATH &quot;/usr/app/collect/sensor.json&quot;</span><br><span class="line">#define MAX_SENSOR_NUM 5          // 对应JSON中PARAMS的元素数量（5个）</span><br><span class="line">#define MAX_ECODE_NUM 8           // ECODE固定8个</span><br><span class="line">#define INITVAL_PER_ECODE 3       // 每个ECODE对应3个INITVAL</span><br><span class="line">#define MAX_INITVAL_NUM (MAX_ECODE_NUM * INITVAL_PER_ECODE) // 最大24个INITVAL</span><br><span class="line">#define IP_MAX_LEN 16</span><br><span class="line">#define PORT_MAX 65535</span><br><span class="line">#define BAUD_MIN 1200</span><br><span class="line">#define BAUD_MAX 115200</span><br><span class="line">#define BUF_SIZE 8192             // 增大缓冲区适配INITVAL</span><br><span class="line"></span><br><span class="line">// 传感器类型映射（与TYPE数值对应）</span><br><span class="line">static const char* sensor_type_map[] = &#123;</span><br><span class="line">    &quot;米朗位移计&quot;, &quot;静力水准仪_厦门欣德&quot;, &quot;温湿度&quot;, &quot;米朗倾角&quot;, &quot;永为倾角&quot;,</span><br><span class="line">    &quot;水位&quot;, &quot;流速&quot;, &quot;ups&quot;, &quot;测斜仪&quot;, &quot;静力水准仪_大趋势&quot;,</span><br><span class="line">    &quot;裂缝计&quot;, &quot;静力水准仪_测艺&quot;, &quot;同和倾角&quot;, &quot;康宇位移&quot;, &quot;振弦西交&quot;,</span><br><span class="line">    &quot;温湿西交&quot;, &quot;盛迪静力水准仪&quot;, &quot;pt100&quot;, &quot;电压&quot;, &quot;电流&quot;,</span><br><span class="line">    &quot;风速&quot;, &quot;风向&quot;, &quot;风速风向&quot;, &quot;激光测距&quot;, &quot;静力水准仪_岩泰&quot;,</span><br><span class="line">    &quot;测艺水位&quot;, &quot;测艺水位_NEW&quot;, &quot;动态风速风向仪&quot;</span><br><span class="line">&#125;;</span><br><span class="line">#define SENSOR_TYPE_CNT (sizeof(sensor_type_map)/sizeof(sensor_type_map[0]))</span><br><span class="line"></span><br><span class="line">// 默认配置（新增INITVAL，与示例JSON一致）</span><br><span class="line">static const int default_TYPE[] = &#123;4,2,5,0,0&#125;;</span><br><span class="line">typedef struct &#123;</span><br><span class="line">    int WAY;</span><br><span class="line">    char TCP_IP[IP_MAX_LEN];</span><br><span class="line">    int TCP_PORT;</span><br><span class="line">    int USART_CHN;</span><br><span class="line">    int USART_BAUD;</span><br><span class="line">    int USART_PARITY;</span><br><span class="line">    int FREQ;</span><br><span class="line">    char ECODE[MAX_ECODE_NUM][64];  // ECODE固定8个</span><br><span class="line">    double INITVAL[MAX_INITVAL_NUM];// 每个ECODE对应3个INITVAL（共24个）</span><br><span class="line">    int NUM;                        // ECODE有效数量（不可编辑）</span><br><span class="line">&#125; SensorParam;</span><br><span class="line"></span><br><span class="line">// 默认INITVAL配置（与示例JSON匹配）</span><br><span class="line">static const double default_initval_0[] = &#123;-0.3, 0.29, 10, 0.14, -0.7, 10, 0.25, 0.09, 10, 0.49, -0.75, 10, 0.01, -0.44, 10, -0.24, 0.12, 10, -0.24, 0.26, 10, 0.55, -0.79, 10&#125;;</span><br><span class="line">static const double default_initval_1[] = &#123;10, 10&#125;;</span><br><span class="line">static const double default_initval_2[] = &#123;10&#125;;</span><br><span class="line">static const double default_initval_3[] = &#123;33089.67, 33104.85&#125;;</span><br><span class="line">static const double default_initval_4[] = &#123;33065.68, 33170.03&#125;;</span><br><span class="line"></span><br><span class="line">static const SensorParam default_PARAMS[] = &#123;</span><br><span class="line">    &#123;1, &quot;192.168.1.105&quot;, 8886, 1, 9600, 0, 5, </span><br><span class="line">     &#123;&quot;ZMDQ-INC-P05-01&quot;,&quot;ZMDQ-INC-P05-02&quot;,&quot;ZMDQ-INC-P04-01&quot;,&quot;ZMDQ-INC-P04-02&quot;,</span><br><span class="line">      &quot;ZMDQ-INC-P03-02&quot;,&quot;ZMDQ-INC-P03-01&quot;,&quot;ZMDQ-INC-P02-01&quot;,&quot;ZMDQ-INC-P02-02&quot;&#125;, </span><br><span class="line">     &#123;[0 ... 23] = 0.0&#125;, 8&#125;, // 先初始化全0，后续赋值</span><br><span class="line">    &#123;0, &quot;192.168.3.124&quot;, 6677, 1, 9600, 0, 2,</span><br><span class="line">     &#123;&quot;ZMDQ-RTS-G01-01&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;&#125;, </span><br><span class="line">     &#123;[0 ... 23] = 0.0&#125;, 1&#125;,</span><br><span class="line">    &#123;0, &quot;192.168.1.231&quot;, 2311, 2, 9600, 0, 2,</span><br><span class="line">     &#123;&quot;ZMDQ-WLI-G01-01&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;&#125;, </span><br><span class="line">     &#123;[0 ... 23] = 0.0&#125;, 1&#125;,</span><br><span class="line">    &#123;0, &quot;192.168.2.151&quot;, 61513, 3, 9600, 0, 2,</span><br><span class="line">     &#123;&quot;ZMDQ-DIS-P01-01&quot;,&quot;ZMDQ-DIS-P01-02&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;&#125;, </span><br><span class="line">     &#123;[0 ... 23] = 0.0&#125;, 2&#125;,</span><br><span class="line">    &#123;0, &quot;192.168.2.151&quot;, 61513, 4, 9600, 0, 2,</span><br><span class="line">     &#123;&quot;ZMDQ-DIS-P06-02&quot;,&quot;ZMDQ-DIS-P06-03&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;&#125;, </span><br><span class="line">     &#123;[0 ... 23] = 0.0&#125;, 2&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// ====================== 工具函数 ======================</span><br><span class="line">// 初始化默认INITVAL</span><br><span class="line">static void init_default_initval(SensorParam PARAMS[]) &#123;</span><br><span class="line">    // 传感器0：8个ECODE → 24个INITVAL</span><br><span class="line">    memcpy(PARAMS[0].INITVAL, default_initval_0, sizeof(default_initval_0));</span><br><span class="line">    // 传感器1：1个ECODE → 3个INITVAL（示例中只有2个，补0）</span><br><span class="line">    memcpy(PARAMS[1].INITVAL, default_initval_1, sizeof(default_initval_1));</span><br><span class="line">    // 传感器2：1个ECODE → 3个INITVAL（示例中只有1个，补0）</span><br><span class="line">    memcpy(PARAMS[2].INITVAL, default_initval_2, sizeof(default_initval_2));</span><br><span class="line">    // 传感器3：2个ECODE → 6个INITVAL（示例中只有2个，补0）</span><br><span class="line">    memcpy(PARAMS[3].INITVAL, default_initval_3, sizeof(default_initval_3));</span><br><span class="line">    // 传感器4：2个ECODE → 6个INITVAL（示例中只有2个，补0）</span><br><span class="line">    memcpy(PARAMS[4].INITVAL, default_initval_4, sizeof(default_initval_4));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 安全字符串拷贝</span><br><span class="line">static void safe_strcpy(char *dst, const char *src, size_t dst_size) &#123;</span><br><span class="line">    if (!dst || !src || dst_size == 0) return;</span><br><span class="line">    strncpy(dst, src, dst_size - 1);</span><br><span class="line">    dst[dst_size - 1] = &#x27;\0&#x27;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 计算ECODE有效数量</span><br><span class="line">static int calc_ecode_num(const char ecode[MAX_ECODE_NUM][64]) &#123;</span><br><span class="line">    int num = 0;</span><br><span class="line">    for (int i=0; i&lt;MAX_ECODE_NUM; i++) &#123;</span><br><span class="line">        if (strlen(ecode[i]) &gt; 0) num++;</span><br><span class="line">    &#125;</span><br><span class="line">    return num &gt; 0 ? num : 1; // 至少1个</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 从字符串中提取整数（简易JSON解析）</span><br><span class="line">static int extract_int(const char *buf, const char *key, int default_val) &#123;</span><br><span class="line">    char key_buf[64];</span><br><span class="line">    snprintf(key_buf, sizeof(key_buf), &quot;\&quot;%s\&quot;:&quot;, key);</span><br><span class="line">    char *pos = strstr(buf, key_buf);</span><br><span class="line">    if (!pos) return default_val;</span><br><span class="line">    </span><br><span class="line">    pos += strlen(key_buf);</span><br><span class="line">    // 跳过空格</span><br><span class="line">    while (*pos == &#x27; &#x27; || *pos == &#x27;\t&#x27; || *pos == &#x27;\n&#x27;) pos++;</span><br><span class="line">    return atoi(pos);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 从字符串中提取字符串（简易JSON解析）</span><br><span class="line">static void extract_str(const char *buf, const char *key, char *dst, size_t dst_size, const char *default_val) &#123;</span><br><span class="line">    char key_buf[64];</span><br><span class="line">    snprintf(key_buf, sizeof(key_buf), &quot;\&quot;%s\&quot;:\&quot;&quot;, key);</span><br><span class="line">    char *pos = strstr(buf, key_buf);</span><br><span class="line">    if (!pos) &#123;</span><br><span class="line">        safe_strcpy(dst, default_val, dst_size);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    pos += strlen(key_buf);</span><br><span class="line">    char *end = strchr(pos, &#x27;&quot;&#x27;);</span><br><span class="line">    if (!end) &#123;</span><br><span class="line">        safe_strcpy(dst, default_val, dst_size);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    int len = end - pos;</span><br><span class="line">    if (len &gt; dst_size - 1) len = dst_size - 1;</span><br><span class="line">    strncpy(dst, pos, len);</span><br><span class="line">    dst[len] = &#x27;\0&#x27;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 从字符串中提取INITVAL数组（简易JSON解析）</span><br><span class="line">static void extract_initval(const char *buf, double initval[], int max_num) &#123;</span><br><span class="line">    // 初始化全0</span><br><span class="line">    for (int i=0; i&lt;max_num; i++) initval[i] = 0.0;</span><br><span class="line">    </span><br><span class="line">    char *initval_pos = strstr(buf, &quot;\&quot;INITVAL\&quot;:[&quot;);</span><br><span class="line">    if (!initval_pos) return;</span><br><span class="line">    </span><br><span class="line">    initval_pos += 10;</span><br><span class="line">    char *initval_end = strchr(initval_pos, &#x27;]&#x27;);</span><br><span class="line">    if (!initval_end) return;</span><br><span class="line">    </span><br><span class="line">    *initval_end = &#x27;\0&#x27;;</span><br><span class="line">    char *token = strtok(initval_pos, &quot;,&quot;);</span><br><span class="line">    int i = 0;</span><br><span class="line">    while (token &amp;&amp; i &lt; max_num) &#123;</span><br><span class="line">        // 跳过空格</span><br><span class="line">        while (*token == &#x27; &#x27; || *token == &#x27;\t&#x27; || *token == &#x27;\n&#x27;) token++;</span><br><span class="line">        initval[i++] = atof(token);</span><br><span class="line">        token = strtok(NULL, &quot;,&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// ====================== 配置读写函数 ======================</span><br><span class="line">// 加载配置（新增INITVAL解析）</span><br><span class="line">static int load_config(int TYPE[], SensorParam PARAMS[]) &#123;</span><br><span class="line">    // 初始化默认配置</span><br><span class="line">    memcpy(TYPE, default_TYPE, sizeof(default_TYPE));</span><br><span class="line">    memcpy(PARAMS, default_PARAMS, sizeof(default_PARAMS));</span><br><span class="line">    // 初始化默认INITVAL</span><br><span class="line">    init_default_initval(PARAMS);</span><br><span class="line"></span><br><span class="line">    // 尝试打开配置文件</span><br><span class="line">    FILE *fp = fopen(CONFIG_PATH, &quot;r&quot;);</span><br><span class="line">    if (!fp) return -1; // 文件不存在，使用默认配置</span><br><span class="line"></span><br><span class="line">    // 读取文件内容</span><br><span class="line">    char buf[BUF_SIZE] = &#123;0&#125;;</span><br><span class="line">    fread(buf, 1, BUF_SIZE-1, fp);</span><br><span class="line">    fclose(fp);</span><br><span class="line"></span><br><span class="line">    // 简易解析TYPE数组（仅提取前5个数值）</span><br><span class="line">    char *type_pos = strstr(buf, &quot;\&quot;TYPE\&quot;:[&quot;);</span><br><span class="line">    if (type_pos) &#123;</span><br><span class="line">        type_pos += 7;</span><br><span class="line">        char *type_end = strchr(type_pos, &#x27;]&#x27;);</span><br><span class="line">        if (type_end) &#123;</span><br><span class="line">            *type_end = &#x27;\0&#x27;;</span><br><span class="line">            char *token = strtok(type_pos, &quot;,&quot;);</span><br><span class="line">            int i = 0;</span><br><span class="line">            while (token &amp;&amp; i &lt; MAX_SENSOR_NUM) &#123;</span><br><span class="line">                TYPE[i++] = atoi(token);</span><br><span class="line">                token = strtok(NULL, &quot;,&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 简易解析PARAMS（新增INITVAL解析）</span><br><span class="line">    char *params_pos = strstr(buf, &quot;\&quot;PARAMS\&quot;:[&quot;);</span><br><span class="line">    if (params_pos) &#123;</span><br><span class="line">        params_pos += 9;</span><br><span class="line">        for (int i=0; i&lt;MAX_SENSOR_NUM; i++) &#123;</span><br><span class="line">            // 找到第i个PARAMS对象的起始</span><br><span class="line">            char *obj_start = strstr(params_pos, &quot;&#123;&quot;);</span><br><span class="line">            if (!obj_start) break;</span><br><span class="line">            obj_start++;</span><br><span class="line">            </span><br><span class="line">            // 找到当前对象的结束</span><br><span class="line">            char *obj_end = obj_start;</span><br><span class="line">            int brace_cnt = 1;</span><br><span class="line">            while (*obj_end &amp;&amp; brace_cnt &gt; 0) &#123;</span><br><span class="line">                if (*obj_end == &#x27;&#123;&#x27;) brace_cnt++;</span><br><span class="line">                else if (*obj_end == &#x27;&#125;&#x27;) brace_cnt--;</span><br><span class="line">                obj_end++;</span><br><span class="line">            &#125;</span><br><span class="line">            if (brace_cnt != 0) break;</span><br><span class="line"></span><br><span class="line">            // 临时缓冲区存储当前对象内容</span><br><span class="line">            char obj_buf[2048] = &#123;0&#125;;</span><br><span class="line">            int obj_len = obj_end - obj_start - 1;</span><br><span class="line">            if (obj_len &gt; 2047) obj_len = 2047;</span><br><span class="line">            strncpy(obj_buf, obj_start, obj_len);</span><br><span class="line"></span><br><span class="line">            // 解析当前传感器的字段</span><br><span class="line">            SensorParam *p = &amp;PARAMS[i];</span><br><span class="line">            p-&gt;WAY = extract_int(obj_buf, &quot;WAY&quot;, p-&gt;WAY);</span><br><span class="line">            </span><br><span class="line">            // 解析TCP</span><br><span class="line">            extract_str(obj_buf, &quot;IP&quot;, p-&gt;TCP_IP, IP_MAX_LEN, p-&gt;TCP_IP);</span><br><span class="line">            p-&gt;TCP_PORT = extract_int(obj_buf, &quot;PORT&quot;, p-&gt;TCP_PORT);</span><br><span class="line">            </span><br><span class="line">            // 解析USART</span><br><span class="line">            p-&gt;USART_CHN = extract_int(obj_buf, &quot;CHN&quot;, p-&gt;USART_CHN);</span><br><span class="line">            p-&gt;USART_BAUD = extract_int(obj_buf, &quot;BAUD&quot;, p-&gt;USART_BAUD);</span><br><span class="line">            p-&gt;USART_PARITY = extract_int(obj_buf, &quot;PARITY&quot;, p-&gt;USART_PARITY);</span><br><span class="line">            </span><br><span class="line">            // 解析FREQ</span><br><span class="line">            p-&gt;FREQ = extract_int(obj_buf, &quot;FREQ&quot;, p-&gt;FREQ);</span><br><span class="line">            </span><br><span class="line">            // 解析ECODE（简易提取数组）</span><br><span class="line">            char *ecode_pos = strstr(obj_buf, &quot;\&quot;ECODE\&quot;:[&quot;);</span><br><span class="line">            if (ecode_pos) &#123;</span><br><span class="line">                ecode_pos += 8;</span><br><span class="line">                char *ecode_end = strchr(ecode_pos, &#x27;]&#x27;);</span><br><span class="line">                if (ecode_end) &#123;</span><br><span class="line">                    *ecode_end = &#x27;\0&#x27;;</span><br><span class="line">                    char *token = strtok(ecode_pos, &quot;,&quot;);</span><br><span class="line">                    int j = 0;</span><br><span class="line">                    while (token &amp;&amp; j &lt; MAX_ECODE_NUM) &#123;</span><br><span class="line">                        // 去掉引号</span><br><span class="line">                        char *start = strchr(token, &#x27;&quot;&#x27;);</span><br><span class="line">                        char *end = strrchr(token, &#x27;&quot;&#x27;);</span><br><span class="line">                        if (start &amp;&amp; end &amp;&amp; start &lt; end) &#123;</span><br><span class="line">                            start++;</span><br><span class="line">                            int len = end - start;</span><br><span class="line">                            if (len &gt; 63) len = 63;</span><br><span class="line">                            strncpy(p-&gt;ECODE[j], start, len);</span><br><span class="line">                            p-&gt;ECODE[j][len] = &#x27;\0&#x27;;</span><br><span class="line">                        &#125; else &#123;</span><br><span class="line">                            p-&gt;ECODE[j][0] = &#x27;\0&#x27;;</span><br><span class="line">                        &#125;</span><br><span class="line">                        j++;</span><br><span class="line">                        token = strtok(NULL, &quot;,&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                    // 清空剩余ECODE</span><br><span class="line">                    for (; j&lt;MAX_ECODE_NUM; j++) &#123;</span><br><span class="line">                        p-&gt;ECODE[j][0] = &#x27;\0&#x27;;</span><br><span class="line">                    &#125;</span><br><span class="line">                    p-&gt;NUM = calc_ecode_num(p-&gt;ECODE);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // 解析INITVAL（新增）</span><br><span class="line">            extract_initval(obj_buf, p-&gt;INITVAL, MAX_INITVAL_NUM);</span><br><span class="line"></span><br><span class="line">            // 移动到下一个对象</span><br><span class="line">            params_pos = obj_end;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 保存配置（新增INITVAL生成）</span><br><span class="line">static int save_config(const int TYPE[], const SensorParam PARAMS[]) &#123;</span><br><span class="line">    // 创建目录（确保存在）</span><br><span class="line">    mkdir(&quot;/usr/app/collect&quot;, 0755);</span><br><span class="line"></span><br><span class="line">    // 写入临时文件</span><br><span class="line">    char temp_path[256];</span><br><span class="line">    snprintf(temp_path, sizeof(temp_path), &quot;%s.tmp&quot;, CONFIG_PATH);</span><br><span class="line">    FILE *fp = fopen(temp_path, &quot;w&quot;);</span><br><span class="line">    if (!fp) return -3;</span><br><span class="line"></span><br><span class="line">    // 生成JSON头部</span><br><span class="line">    fprintf(fp, &quot;&#123;\n\t\&quot;TYPE\&quot;: [&quot;);</span><br><span class="line">    for (int i=0; i&lt;MAX_SENSOR_NUM; i++) &#123;</span><br><span class="line">        fprintf(fp, &quot;%d&quot;, TYPE[i]);</span><br><span class="line">        if (i &lt; MAX_SENSOR_NUM - 1) fprintf(fp, &quot;,&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    fprintf(fp, &quot;],\n\t\&quot;PARAMS\&quot;: [\n&quot;);</span><br><span class="line"></span><br><span class="line">    // 生成每个传感器的PARAMS（新增INITVAL）</span><br><span class="line">    for (int i=0; i&lt;MAX_SENSOR_NUM; i++) &#123;</span><br><span class="line">        const SensorParam *p = &amp;PARAMS[i];</span><br><span class="line">        fprintf(fp, &quot;\t\t&#123;\n&quot;);</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\&quot;WAY\&quot;: %d,\n&quot;, p-&gt;WAY);</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\&quot;TCP\&quot;: &#123;\n&quot;);</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\t\&quot;IP\&quot;: \&quot;%s\&quot;,\n&quot;, p-&gt;TCP_IP);</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\t\&quot;PORT\&quot;: %d\n&quot;, p-&gt;TCP_PORT);</span><br><span class="line">        fprintf(fp, &quot;\t\t\t&#125;,\n&quot;);</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\&quot;USART\&quot;: &#123;\n&quot;);</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\t\&quot;CHN\&quot;: %d,\n&quot;, p-&gt;USART_CHN);</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\t\&quot;BAUD\&quot;: %d,\n&quot;, p-&gt;USART_BAUD);</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\t\&quot;PARITY\&quot;: %d\n&quot;, p-&gt;USART_PARITY);</span><br><span class="line">        fprintf(fp, &quot;\t\t\t&#125;,\n&quot;);</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\&quot;FREQ\&quot;: %d,\n&quot;, p-&gt;FREQ);</span><br><span class="line">        </span><br><span class="line">        // 生成ADDR数组（1~NUM）</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\&quot;ADDR\&quot;: [&quot;);</span><br><span class="line">        int num = calc_ecode_num(p-&gt;ECODE);</span><br><span class="line">        for (int j=0; j&lt;num; j++) &#123;</span><br><span class="line">            fprintf(fp, &quot;%d&quot;, j+1);</span><br><span class="line">            if (j &lt; num - 1) fprintf(fp, &quot;,&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        fprintf(fp, &quot;],\n&quot;);</span><br><span class="line">        </span><br><span class="line">        // 生成ECODE数组</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\&quot;ECODE\&quot;: [&quot;);</span><br><span class="line">        int ecode_cnt = 0;</span><br><span class="line">        for (int j=0; j&lt;MAX_ECODE_NUM; j++) &#123;</span><br><span class="line">            if (strlen(p-&gt;ECODE[j]) &gt; 0) &#123;</span><br><span class="line">                if (ecode_cnt &gt; 0) fprintf(fp, &quot;,&quot;);</span><br><span class="line">                fprintf(fp, &quot;\&quot;%s\&quot;&quot;, p-&gt;ECODE[j]);</span><br><span class="line">                ecode_cnt++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        fprintf(fp, &quot;],\n&quot;);</span><br><span class="line">        </span><br><span class="line">        // 生成INITVAL数组（新增）</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\&quot;INITVAL\&quot;: [&quot;);</span><br><span class="line">        int initval_cnt = num * INITVAL_PER_ECODE; // 每个ECODE对应3个</span><br><span class="line">        for (int j=0; j&lt;initval_cnt; j++) &#123;</span><br><span class="line">            if (j &gt; 0) fprintf(fp, &quot;,&quot;);</span><br><span class="line">            fprintf(fp, &quot;%.2f&quot;, p-&gt;INITVAL[j]); // 保留2位小数</span><br><span class="line">        &#125;</span><br><span class="line">        fprintf(fp, &quot;],\n&quot;);</span><br><span class="line">        </span><br><span class="line">        // 生成NUM</span><br><span class="line">        fprintf(fp, &quot;\t\t\t\&quot;NUM\&quot;: %d\n&quot;, num);</span><br><span class="line">        </span><br><span class="line">        fprintf(fp, &quot;\t\t&#125;&quot;);</span><br><span class="line">        if (i &lt; MAX_SENSOR_NUM - 1) fprintf(fp, &quot;,&quot;);</span><br><span class="line">        fprintf(fp, &quot;\n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 生成camera和yb节点（空值）</span><br><span class="line">    fprintf(fp, &quot;\t],\n&quot;);</span><br><span class="line">    fprintf(fp, &quot;\t\&quot;camera\&quot;: [],\n&quot;);</span><br><span class="line">    fprintf(fp, &quot;\t\&quot;yb\&quot;: &#123;\n&quot;);</span><br><span class="line">    fprintf(fp, &quot;\t\t\&quot;PORT\&quot;: 7788,\n&quot;);</span><br><span class="line">    fprintf(fp, &quot;\t\t\&quot;FREQ\&quot;: 1,\n&quot;);</span><br><span class="line">    fprintf(fp, &quot;\t\t\&quot;NUM\&quot;: 6,\n&quot;);</span><br><span class="line">    fprintf(fp, &quot;\t\t\&quot;ECODE\&quot;: [],\n&quot;);</span><br><span class="line">    fprintf(fp, &quot;\t\t\&quot;INITVAL\&quot;: []\n&quot;);</span><br><span class="line">    fprintf(fp, &quot;\t&#125;\n&quot;);</span><br><span class="line">    fprintf(fp, &quot;&#125;\n&quot;);</span><br><span class="line"></span><br><span class="line">    fclose(fp);</span><br><span class="line"></span><br><span class="line">    // 替换原文件</span><br><span class="line">    if (rename(temp_path, CONFIG_PATH) != 0) &#123;</span><br><span class="line">        unlink(temp_path);</span><br><span class="line">        return -4;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 修改文件权限（确保www-data可读写）</span><br><span class="line">    chown(CONFIG_PATH, getuid(), getgid());</span><br><span class="line">    chmod(CONFIG_PATH, 0644);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// ====================== HTML生成函数（新增INITVAL模块） ======================</span><br><span class="line">static void generate_html(const int TYPE[], const SensorParam PARAMS[], const char *msg, int is_success) &#123;</span><br><span class="line">    // 设置响应头</span><br><span class="line">    cgiHeaderContentType(&quot;text/html; charset=GBK&quot;);</span><br><span class="line"></span><br><span class="line">    // 输出HTML页面</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;!DOCTYPE html&gt;&lt;html lang=&#x27;zh-CN&#x27;&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;head&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;meta charset=&#x27;GBK&#x27;&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;title&gt;传感器配置管理&lt;/title&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;style&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;body &#123;font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.container &#123;max-width: 1400px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px #ddd;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.sensor-card &#123;margin: 15px 0; padding: 15px; border: 1px solid #eee; border-radius: 4px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.sensor-card h3 &#123;margin-top: 0; color: #333;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.form-item &#123;margin: 10px 0;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;label &#123;display: inline-block; width: 100px; text-align: right; margin-right: 10px;&#125;&quot;);</span><br><span class="line">    </span><br><span class="line">// USART布局核心样式</span><br><span class="line">fprintf(cgiOut, &quot;.usart-container &#123;margin: 10px 0; padding: 0;&#125;&quot;);  // 和其他元素保持间距</span><br><span class="line">fprintf(cgiOut, &quot;.usart-row &#123;display: flex; align-items: center; gap: 20px; /* 增大项间距，避免拥挤 */ flex-wrap: wrap; /* 宽度不够时自动换行，不挤后面元素 */&#125;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;.usart-item &#123;display: flex; align-items: center;&#125;&quot;);  // 每个项内部标签+输入框对齐</span><br><span class="line">fprintf(cgiOut, &quot;.usart-item label &#123;width: auto; margin-right: 6px; text-align: left; white-space: nowrap; /* 标签文字不换行 */&#125;&quot;);</span><br><span class="line">// 保留原来的short类样式，不用改</span><br><span class="line">fprintf(cgiOut, &quot;input[type=&#x27;number&#x27;].short &#123;width: 80px;&#125;&quot;);</span><br><span class="line"></span><br><span class="line">// TCP布局样式</span><br><span class="line">// TCP布局样式（和USART风格统一）</span><br><span class="line">fprintf(cgiOut, &quot;.tcp-container &#123;margin: 10px 0; padding: 0;&#125;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;.tcp-row &#123;display: flex; align-items: center; gap: 20px; flex-wrap: wrap;&#125;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;.tcp-item &#123;display: flex; align-items: center;&#125;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;.tcp-item label &#123;width: auto; margin-right: 6px; text-align: left; white-space: nowrap;&#125;&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	fprintf(cgiOut, &quot;input[type=&#x27;text&#x27;], input[type=&#x27;number&#x27;], select &#123;padding: 6px; border: 1px solid #ccc; border-radius: 4px; width: 200px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;input[type=&#x27;number&#x27;].short &#123;width: 80px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;input[type=&#x27;number&#x27;].initval &#123;width: 100px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.ecode-group, .initval-group &#123;margin: 15px 0; padding: 10px; border: 1px solid #e0e0e0; border-radius: 4px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.ecode-item, .initval-item &#123;margin: 8px 0; display: flex; align-items: center;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.initval-subitem &#123;margin: 0 5px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.group-title &#123;margin: 0 0 10px 0; color: #007bff; font-weight: bold;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.msg &#123;padding: 10px; margin: 15px 0; border-radius: 4px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.success &#123;background: #d4edda; color: #155724; border: 1px solid #c3e6cb;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.error &#123;background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;button &#123;padding: 8px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;button:hover &#123;background: #0056b3;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;/style&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;/head&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;body&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;div class=&#x27;container&#x27;&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;h1&gt;传感器配置管理&lt;/h1&gt;&quot;);</span><br><span class="line"></span><br><span class="line">    // 提示信息</span><br><span class="line">    if (msg &amp;&amp; strlen(msg) &gt; 0) &#123;</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;msg %s&#x27;&gt;%s&lt;/div&gt;&quot;, is_success ? &quot;success&quot; : &quot;error&quot;, msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 表单</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;form method=&#x27;POST&#x27;&gt;&quot;);</span><br><span class="line">    for (int i=0; i&lt;MAX_SENSOR_NUM; i++) &#123;</span><br><span class="line">        const SensorParam *p = &amp;PARAMS[i];</span><br><span class="line">        const char *type_name = (TYPE[i] &lt; SENSOR_TYPE_CNT) ? sensor_type_map[TYPE[i]] : &quot;未知传感器&quot;;</span><br><span class="line">        int ecode_num = calc_ecode_num(p-&gt;ECODE);</span><br><span class="line"></span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;sensor-card&#x27;&gt;&quot;);</span><br><span class="line">       // fprintf(cgiOut, &quot;&lt;h3&gt;传感器 %d - %s（类型编码：%d）&lt;/h3&gt;&quot;, i+1, type_name, TYPE[i]);</span><br><span class="line"></span><br><span class="line">		fprintf(cgiOut, &quot;&lt;h3 style=&#x27;font-size: 24px;&#x27;&gt;传感器 %d - %s（类型编码：%d）&lt;/h3&gt;&quot;, i+1, type_name, TYPE[i]);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // 传感器类型（下拉选择）</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;label&gt;传感器类型：&lt;/label&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;select name=&#x27;type_%d&#x27;&gt;&quot;, i);</span><br><span class="line">        for (int k=0; k&lt;SENSOR_TYPE_CNT; k++) &#123;</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;option value=&#x27;%d&#x27; %s&gt;%d - %s&lt;/option&gt;&quot;, </span><br><span class="line">                   k, (TYPE[i] == k) ? &quot;selected&quot; : &quot;&quot;, k, sensor_type_map[k]);</span><br><span class="line">        &#125;</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/select&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">        // WAY（通信方式）</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;label&gt;通信方式：&lt;/label&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;select name=&#x27;way_%d&#x27;&gt;&quot;, i);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;option value=&#x27;0&#x27; %s&gt;TCP&lt;/option&gt;&quot;, (p-&gt;WAY == 0) ? &quot;selected&quot; : &quot;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;option value=&#x27;1&#x27; %s&gt;USART&lt;/option&gt;&quot;, (p-&gt;WAY == 1) ? &quot;selected&quot; : &quot;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/select&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">        // TCP配置</span><br><span class="line">    /*    fprintf(cgiOut, &quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;label&gt;TCP IP：&lt;/label&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;input type=&#x27;text&#x27; name=&#x27;tcp_ip_%d&#x27; value=&#x27;%s&#x27; maxlength=&#x27;%d&#x27;&gt;&quot;, </span><br><span class="line">               i, p-&gt;TCP_IP, IP_MAX_LEN-1);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;label&gt;TCP PORT：&lt;/label&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;input type=&#x27;number&#x27; name=&#x27;tcp_port_%d&#x27; value=&#x27;%d&#x27; min=&#x27;1&#x27; max=&#x27;%d&#x27; class=&#x27;short&#x27;&gt;&quot;, </span><br><span class="line">               i, p-&gt;TCP_PORT, PORT_MAX);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line">// TCP配置（改为同一行显示）</span><br><span class="line">fprintf(cgiOut, &quot;&lt;div class=&#x27;form-item tcp-container&#x27;&gt;&quot;);  // 外层容器，隔离TCP区域</span><br><span class="line">fprintf(cgiOut, &quot;&lt;div class=&#x27;tcp-row&#x27;&gt;&quot;);  // 内层行布局，控制IP/PORT在一行</span><br><span class="line">// TCP IP</span><br><span class="line">fprintf(cgiOut, &quot;&lt;div class=&#x27;tcp-item&#x27;&gt;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;label&gt;TCP IP：&lt;/label&gt;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;input type=&#x27;text&#x27; name=&#x27;tcp_ip_%d&#x27; value=&#x27;%s&#x27; maxlength=&#x27;%d&#x27;&gt;&quot;, </span><br><span class="line">       i, p-&gt;TCP_IP, IP_MAX_LEN-1);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">// TCP PORT</span><br><span class="line">fprintf(cgiOut, &quot;&lt;div class=&#x27;tcp-item&#x27;&gt;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;label&gt;TCP PORT：&lt;/label&gt;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;input type=&#x27;number&#x27; name=&#x27;tcp_port_%d&#x27; value=&#x27;%d&#x27; min=&#x27;1&#x27; max=&#x27;%d&#x27; class=&#x27;short&#x27;&gt;&quot;, </span><br><span class="line">       i, p-&gt;TCP_PORT, PORT_MAX);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);  // 闭合tcp-row</span><br><span class="line">fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);  // 闭合tcp-container</span><br><span class="line"></span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">// USART配置（同一行显示，且和后续元素分隔开）</span><br><span class="line">fprintf(cgiOut, &quot;&lt;div class=&#x27;form-item usart-container&#x27;&gt;&quot;);  // 外层容器，专门隔离USART区域</span><br><span class="line">fprintf(cgiOut, &quot;&lt;div class=&#x27;usart-row&#x27;&gt;&quot;);  // 内层行布局，放三个配置项</span><br><span class="line">// CHN</span><br><span class="line">fprintf(cgiOut, &quot;&lt;div class=&#x27;usart-item&#x27;&gt;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;label&gt;USART CHN：&lt;/label&gt;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;input type=&#x27;number&#x27; name=&#x27;usart_chn_%d&#x27; value=&#x27;%d&#x27; min=&#x27;1&#x27; max=&#x27;10&#x27; class=&#x27;short&#x27;&gt;&quot;, </span><br><span class="line">       i, p-&gt;USART_CHN);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">// BAUD</span><br><span class="line">fprintf(cgiOut, &quot;&lt;div class=&#x27;usart-item&#x27;&gt;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;label&gt;USART BAUD：&lt;/label&gt;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;input type=&#x27;number&#x27; name=&#x27;usart_baud_%d&#x27; value=&#x27;%d&#x27; min=&#x27;%d&#x27; max=&#x27;%d&#x27; class=&#x27;short&#x27;&gt;&quot;, </span><br><span class="line">       i, p-&gt;USART_BAUD, BAUD_MIN, BAUD_MAX);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">// PARITY</span><br><span class="line">fprintf(cgiOut, &quot;&lt;div class=&#x27;usart-item&#x27;&gt;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;label&gt;USART PARITY：&lt;/label&gt;&quot;);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;input type=&#x27;number&#x27; name=&#x27;usart_parity_%d&#x27; value=&#x27;%d&#x27; min=&#x27;0&#x27; max=&#x27;3&#x27; class=&#x27;short&#x27;&gt;&quot;, </span><br><span class="line">       i, p-&gt;USART_PARITY);</span><br><span class="line">fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);  // 闭合usart-row</span><br><span class="line">fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);  // 闭合usart-container</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // FREQ</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;label&gt;频率FREQ：&lt;/label&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;input type=&#x27;number&#x27; name=&#x27;freq_%d&#x27; value=&#x27;%d&#x27; min=&#x27;1&#x27; max=&#x27;60&#x27; class=&#x27;short&#x27;&gt;&quot;, </span><br><span class="line">               i, p-&gt;FREQ);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">        // ECODE（固定8个）</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;ecode-group&#x27;&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;group-title&#x27;&gt;ECODE列表（每个ECODE对应3个INITVAL）&lt;/div&gt;&quot;);</span><br><span class="line">        for (int j=0; j&lt;MAX_ECODE_NUM; j++) &#123;</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;div class=&#x27;ecode-item&#x27;&gt;&quot;);</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;label&gt;&amp;nbsp;&amp;nbsp;ECODE %d：&lt;/label&gt;&quot;, j+1);</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;input type=&#x27;text&#x27; name=&#x27;ecode_%d_%d&#x27; value=&#x27;%s&#x27; maxlength=&#x27;63&#x27; placeholder=&#x27;输入ECODE编码&#x27;&gt;&quot;, </span><br><span class="line">                   i, j, p-&gt;ECODE[j]);</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">        // INITVAL模块（新增，每个ECODE对应3个）</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;initval-group&#x27;&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;group-title&#x27;&gt;INITVAL列表（共%d个，按ECODE顺序）&lt;/div&gt;&quot;, ecode_num * INITVAL_PER_ECODE);</span><br><span class="line">        for (int j=0; j&lt;ecode_num; j++) &#123;</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;div class=&#x27;initval-item&#x27;&gt;&quot;);</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;label&gt;&amp;nbsp;&amp;nbsp;ECODE %d：&lt;/label&gt;&quot;, j+1);</span><br><span class="line">            // 每个ECODE对应3个INITVAL</span><br><span class="line">            for (int k=0; k&lt;INITVAL_PER_ECODE; k++) &#123;</span><br><span class="line">                int idx = j * INITVAL_PER_ECODE + k;</span><br><span class="line">                fprintf(cgiOut, &quot;&lt;div class=&#x27;initval-subitem&#x27;&gt;&quot;);</span><br><span class="line">                fprintf(cgiOut, &quot;INITVAL %d：&lt;input type=&#x27;number&#x27; name=&#x27;initval_%d_%d&#x27; value=&#x27;%.2f&#x27; step=&#x27;0.01&#x27; class=&#x27;initval&#x27;&gt;&quot;, </span><br><span class="line">                       k+1, i, idx, p-&gt;INITVAL[idx]);</span><br><span class="line">                fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        // 隐藏的多余INITVAL（防止提交时丢失）</span><br><span class="line">        for (int j=ecode_num * INITVAL_PER_ECODE; j&lt;MAX_INITVAL_NUM; j++) &#123;</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;input type=&#x27;hidden&#x27; name=&#x27;initval_%d_%d&#x27; value=&#x27;%.2f&#x27;&gt;&quot;, </span><br><span class="line">                   i, j, p-&gt;INITVAL[j]);</span><br><span class="line">        &#125;</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">        // NUM（展示不可编辑）</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;label&gt;有效数量：&lt;/label&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;input type=&#x27;text&#x27; value=&#x27;%d&#x27; readonly style=&#x27;background: #eee;&#x27;&gt;&quot;, p-&gt;NUM);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 提交按钮</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;label&gt;&amp;nbsp;&lt;/label&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;button type=&#x27;submit&#x27;&gt;保存配置&lt;/button&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;/form&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;/body&gt;&lt;/html&gt;&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// ====================== CGIC主函数（新增INITVAL参数解析） ======================</span><br><span class="line">int cgiMain() &#123;</span><br><span class="line">    int TYPE[MAX_SENSOR_NUM];</span><br><span class="line">    SensorParam PARAMS[MAX_SENSOR_NUM];</span><br><span class="line">    char msg[256] = &#123;0&#125;;</span><br><span class="line">    int is_success = 0;</span><br><span class="line"></span><br><span class="line">    // 加载配置</span><br><span class="line">    int load_ret = load_config(TYPE, PARAMS);</span><br><span class="line">    if (load_ret != 0 &amp;&amp; load_ret != -1) &#123; // -1表示文件不存在，使用默认配置</span><br><span class="line">        snprintf(msg, sizeof(msg), &quot;加载配置失败（错误码：%d），使用默认配置&quot;, load_ret);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 处理POST提交</span><br><span class="line">    if (strcmp(cgiRequestMethod, &quot;POST&quot;) == 0) &#123;</span><br><span class="line">        // 解析表单参数</span><br><span class="line">        for (int i=0; i&lt;MAX_SENSOR_NUM; i++) &#123;</span><br><span class="line">            SensorParam *p = &amp;PARAMS[i];</span><br><span class="line">            char field_name[64];</span><br><span class="line">            int val;</span><br><span class="line">            double dval;</span><br><span class="line">            int form_ret;</span><br><span class="line"></span><br><span class="line">            // 传感器类型</span><br><span class="line">            snprintf(field_name, sizeof(field_name), &quot;type_%d&quot;, i);</span><br><span class="line">            form_ret = cgiFormInteger(field_name, &amp;val, TYPE[i]);</span><br><span class="line">            if (form_ret == cgiFormSuccess &amp;&amp; val &gt;=0 &amp;&amp; val &lt; SENSOR_TYPE_CNT) &#123;</span><br><span class="line">                TYPE[i] = val;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // WAY</span><br><span class="line">            snprintf(field_name, sizeof(field_name), &quot;way_%d&quot;, i);</span><br><span class="line">            form_ret = cgiFormInteger(field_name, &amp;val, p-&gt;WAY);</span><br><span class="line">            p-&gt;WAY = (val == 1) ? 1 : 0;</span><br><span class="line"></span><br><span class="line">            // TCP IP</span><br><span class="line">            snprintf(field_name, sizeof(field_name), &quot;tcp_ip_%d&quot;, i);</span><br><span class="line">            form_ret = cgiFormString(field_name, p-&gt;TCP_IP, IP_MAX_LEN);</span><br><span class="line">            if (form_ret != cgiFormSuccess) &#123;</span><br><span class="line">                safe_strcpy(p-&gt;TCP_IP, default_PARAMS[i].TCP_IP, IP_MAX_LEN);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // TCP PORT</span><br><span class="line">            snprintf(field_name, sizeof(field_name), &quot;tcp_port_%d&quot;, i);</span><br><span class="line">            form_ret = cgiFormInteger(field_name, &amp;val, p-&gt;TCP_PORT);</span><br><span class="line">            if (form_ret == cgiFormSuccess &amp;&amp; val &gt;=1 &amp;&amp; val &lt;= PORT_MAX) &#123;</span><br><span class="line">                p-&gt;TCP_PORT = val;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // USART CHN</span><br><span class="line">            snprintf(field_name, sizeof(field_name), &quot;usart_chn_%d&quot;, i);</span><br><span class="line">            form_ret = cgiFormInteger(field_name, &amp;val, p-&gt;USART_CHN);</span><br><span class="line">            if (form_ret == cgiFormSuccess &amp;&amp; val &gt;=1 &amp;&amp; val &lt;= 10) &#123;</span><br><span class="line">                p-&gt;USART_CHN = val;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // USART BAUD</span><br><span class="line">            snprintf(field_name, sizeof(field_name), &quot;usart_baud_%d&quot;, i);</span><br><span class="line">            form_ret = cgiFormInteger(field_name, &amp;val, p-&gt;USART_BAUD);</span><br><span class="line">            if (form_ret == cgiFormSuccess &amp;&amp; val &gt;= BAUD_MIN &amp;&amp; val &lt;= BAUD_MAX) &#123;</span><br><span class="line">                p-&gt;USART_BAUD = val;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // USART PARITY</span><br><span class="line">            snprintf(field_name, sizeof(field_name), &quot;usart_parity_%d&quot;, i);</span><br><span class="line">            form_ret = cgiFormInteger(field_name, &amp;val, p-&gt;USART_PARITY);</span><br><span class="line">            if (form_ret == cgiFormSuccess &amp;&amp; val &gt;=0 &amp;&amp; val &lt;= 3) &#123;</span><br><span class="line">                p-&gt;USART_PARITY = val;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // FREQ</span><br><span class="line">            snprintf(field_name, sizeof(field_name), &quot;freq_%d&quot;, i);</span><br><span class="line">            form_ret = cgiFormInteger(field_name, &amp;val, p-&gt;FREQ);</span><br><span class="line">            if (form_ret == cgiFormSuccess &amp;&amp; val &gt;=1 &amp;&amp; val &lt;= 60) &#123;</span><br><span class="line">                p-&gt;FREQ = val;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // ECODE</span><br><span class="line">            for (int j=0; j&lt;MAX_ECODE_NUM; j++) &#123;</span><br><span class="line">                char ecode[64] = &#123;0&#125;;</span><br><span class="line">                snprintf(field_name, sizeof(field_name), &quot;ecode_%d_%d&quot;, i, j);</span><br><span class="line">                form_ret = cgiFormString(field_name, ecode, 64);</span><br><span class="line">                if (form_ret == cgiFormSuccess) &#123;</span><br><span class="line">                    safe_strcpy(p-&gt;ECODE[j], ecode, 64);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    p-&gt;ECODE[j][0] = &#x27;\0&#x27;;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // 解析INITVAL（新增）</span><br><span class="line">            int ecode_num = calc_ecode_num(p-&gt;ECODE);</span><br><span class="line">            int initval_num = ecode_num * INITVAL_PER_ECODE;</span><br><span class="line">            for (int j=0; j&lt;initval_num; j++) &#123;</span><br><span class="line">                snprintf(field_name, sizeof(field_name), &quot;initval_%d_%d&quot;, i, j);</span><br><span class="line">                form_ret = cgiFormDouble(field_name, &amp;dval, p-&gt;INITVAL[j]);</span><br><span class="line">                if (form_ret == cgiFormSuccess) &#123;</span><br><span class="line">                    p-&gt;INITVAL[j] = dval;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // 更新NUM</span><br><span class="line">            p-&gt;NUM = ecode_num;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 保存配置</span><br><span class="line">        int save_ret = save_config(TYPE, PARAMS);</span><br><span class="line">        if (save_ret == 0) &#123;</span><br><span class="line">            snprintf(msg, sizeof(msg), &quot;配置保存成功！&quot;);</span><br><span class="line">            is_success = 1;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            const char *err_msg[] = &#123;</span><br><span class="line">                &quot;参数无效&quot;, &quot;JSON生成失败&quot;, &quot;文件写入失败&quot;, &quot;文件重命名失败&quot;</span><br><span class="line">            &#125;;</span><br><span class="line">            if (save_ret &gt;= -4 &amp;&amp; save_ret &lt;= -1) &#123;</span><br><span class="line">                snprintf(msg, sizeof(msg), &quot;保存失败：%s&quot;, err_msg[-save_ret-1]);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                snprintf(msg, sizeof(msg), &quot;保存失败：未知错误（%d）&quot;, save_ret);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 生成HTML</span><br><span class="line">    generate_html(TYPE, PARAMS, msg, is_success);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="3-3-cgic文件树"><a href="#3-3-cgic文件树" class="headerlink" title="3.3 cgic文件树"></a>3.3 cgic文件树</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/home/zz/boaWork/www/cgi-bin/Sensor/CGIC/cgic-master</span><br><span class="line">├── capture</span><br><span class="line">├── capture.c</span><br><span class="line">├── capture.o</span><br><span class="line">├── cgic.c</span><br><span class="line">├── cgic.h</span><br><span class="line">├── cgic.html</span><br><span class="line">├── cgic.o</span><br><span class="line">├── cgictest.c</span><br><span class="line">├── cgictest.cgi</span><br><span class="line">├── cgictest.o</span><br><span class="line">├── libcgic.a</span><br><span class="line">├── license.txt</span><br><span class="line">├── Makefile</span><br><span class="line">└── README.md</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="3-4-gcc生成cgi文件"><a href="#3-4-gcc生成cgi文件" class="headerlink" title="3.4 gcc生成cgi文件"></a>3.4 gcc生成cgi文件</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gcc sensor.c -o sensor.cgi -L./home/zz/boaWork/www/cgi-bin/Sensor/CGIC/cgic-master -lcgic -Wall</span><br></pre></td></tr></table></figure></div>
+
+
+
+
+
+
+
+
+		</div>
+
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/02/27/2026/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">2026</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">Boa+cgic在嵌入式设备应用2-sensor配置</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98"><span class="nav-text">1 中文乱码问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-CGIC"><span class="nav-text">2 CGIC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1%E9%83%A8%E7%BD%B2"><span class="nav-text">2.1部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%B5%8B%E8%AF%95"><span class="nav-text">2.2 测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BC%96%E8%AF%91sensor-c%E5%9C%A8VMware"><span class="nav-text">3 编译sensor.c在VMware</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-sensor-json"><span class="nav-text">3.1 sensor.json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-sensor-c%E6%96%87%E4%BB%B6"><span class="nav-text">3.2 sensor.c文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-cgic%E6%96%87%E4%BB%B6%E6%A0%91"><span class="nav-text">3.3 cgic文件树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-gcc%E7%94%9F%E6%88%90cgi%E6%96%87%E4%BB%B6"><span class="nav-text">3.4 gcc生成cgi文件</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+		
+
+    
+		
+		
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+
+</main>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Swup.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/imageViewer.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/utils.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/main.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/navbarShrink.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/scrollTopBottom.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/lightDarkSwitch.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/categoryList.js" ></script>
+
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/codeBlock.js" ></script>
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/lazyload.js" ></script>
+
+
+
+
+
+  <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Typed.min.js" ></script>
+  <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/typed.js" ></script>
+
+
+
+
+
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/anime.min.js" ></script>
+
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/tocToggle.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/toc.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/tabs.js" data-swup-reload-script></script>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/essays.js" data-swup-reload-script></script>
+
+
+
+
+	
+</body>
+
+</html>
