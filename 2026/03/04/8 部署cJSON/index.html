@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="dawn">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+            <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://sunrisedawn.github.io/2026/03/04/8 部署cjson/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="dawn&#39;s blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="部署cJSON">
+<meta property="og:url" content="https://sunrisedawn.github.io/2026/03/04/8%20%E9%83%A8%E7%BD%B2cJSON/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="dawn&#39;s blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sunrisedawn.github.io/images/eva1.png">
+<meta property="article:published_time" content="2026-03-04T07:31:12.148Z">
+<meta property="article:modified_time" content="2026-03-04T08:55:24.854Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sunrisedawn.github.io/images/eva1.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/linboli.jpg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/linboli.jpg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/linboli.jpg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            部署cJSON | dawn&#39;s blog
+        
+    </title>
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"sunrisedawn.github.io","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":false,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":false,"site_pv":false,"site_uv":false,"post_pv":false},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/eva1.png","description":"dawn's blog"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"万象有序","subtitle":{"text":[],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"},"Categories":{"icon":"fa-solid fa-folder","path":"/categories/"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                dawn&#39;s blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/tags/"
+                                        >
+                                    <i class="fa-solid fa-tags fa-fw"></i>
+                                    TAGS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/"
+                                        >
+                                    <i class="fa-solid fa-folder fa-fw"></i>
+                                    CATEGORIES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/tags/"
+                        >
+                            <span>
+                                TAGS
+                            </span>
+                            
+                                <i class="fa-solid fa-tags fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/"
+                        >
+                            <span>
+                                CATEGORIES
+                            </span>
+                            
+                                <i class="fa-solid fa-folder fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">9</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">部署cJSON</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/linboli.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">dawn</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-03-04 15:31:12</span>
+        <span class="mobile">2026-03-04 15:31:12</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-03-04 16:55:24</span>
+            <span class="mobile">2026-03-04 16:55:24</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h2 id="1-下载源码"><a href="#1-下载源码" class="headerlink" title="1 下载源码"></a>1 下载源码</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/DaveGamble/cJSON</span><br></pre></td></tr></table></figure></div>
+
+<p>只复制 <code>cJSON.c</code> 和 <code>cJSON.h</code> 到项目目录；</p>
+<p><strong>编译指令，结合cgic</strong></p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gcc sensor-camera.c cJSON.c -o sensor-camera.cgi -I./home/zz/boaWork/www/cgi-bin/Sensor/CGIC/cgic-master -L./home/zz/boaWork/www/cgi-bin/Sensor/CGIC/cgic-master -lcgic -lm -Wall</span><br></pre></td></tr></table></figure></div>
+
+<p><code>-I</code>：指定 <code>cgic.h</code> 头文件路径（如果需要）；</p>
+<p><code>-L</code>：指定 <code>cgic</code> 库路径；</p>
+<p><code>-lcgic</code>：链接 CGIC 库；</p>
+<p><code>-lm</code>：链接数学库（CJSON 解析数字依赖）。</p>
+<h2 id="2-sensor-camera-c引入cJSON代码"><a href="#2-sensor-camera-c引入cJSON代码" class="headerlink" title="2 sensor-camera.c引入cJSON代码"></a>2 sensor-camera.c引入cJSON代码</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;sys/stat.h&gt;</span><br><span class="line">#include &lt;ctype.h&gt;</span><br><span class="line">#include &quot;cgic.h&quot;</span><br><span class="line">#include &quot;cJSON.h&quot;</span><br><span class="line"></span><br><span class="line">// ====================== 配置定义 ======================</span><br><span class="line">#define CONFIG_PATH &quot;/usr/app/collect/sensor.json&quot;</span><br><span class="line">#define MAX_CAMERA_NUM 2          // 最大摄像头数量</span><br><span class="line">#define MAX_ECODE_PER_CAMERA 32    // 每个摄像头最多 ECODE 数量</span><br><span class="line">#define INITVAL_PER_ECODE 2        // 每个 ECODE 对应 2 个 INITVAL</span><br><span class="line">#define MAX_INITVAL_PER_CAMERA (MAX_ECODE_PER_CAMERA * INITVAL_PER_ECODE)</span><br><span class="line"></span><br><span class="line">typedef struct &#123;</span><br><span class="line">    char id[64];</span><br><span class="line">    int num;                                // ECODE 数量</span><br><span class="line">    char ecode[MAX_ECODE_PER_CAMERA][64];</span><br><span class="line">    double initval[MAX_INITVAL_PER_CAMERA]; // 按 ECODE 顺序存储</span><br><span class="line">&#125; CameraItem;</span><br><span class="line"></span><br><span class="line">// ====================== 工具函数 ======================</span><br><span class="line">static void safe_strcpy(char *dst, const char *src, size_t dst_size) &#123;</span><br><span class="line">    if (!dst || !src || dst_size == 0) return;</span><br><span class="line">    strncpy(dst, src, dst_size - 1);</span><br><span class="line">    dst[dst_size - 1] = &#x27;\0&#x27;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 替换字符串中的 Tab 为 4 个空格（适配旧版 cJSON）</span><br><span class="line">static char* replace_tab_with_space(const char *src) &#123;</span><br><span class="line">    if (src == NULL) return NULL;</span><br><span class="line">    </span><br><span class="line">    // 先统计 Tab 数量，计算新字符串长度</span><br><span class="line">    int tab_count = 0;</span><br><span class="line">    int len = strlen(src);</span><br><span class="line">    for (int i = 0; i &lt; len; i++) &#123;</span><br><span class="line">        if (src[i] == &#x27;\t&#x27;) tab_count++;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 分配新内存：原长度 + tab_count*3（每个 Tab 替换成 4 个空格，多占 3 个字符）</span><br><span class="line">    char *new_str = (char*)malloc(len + tab_count*3 + 1);</span><br><span class="line">    if (new_str == NULL) return NULL;</span><br><span class="line">    </span><br><span class="line">    // 替换 Tab 为 4 个空格</span><br><span class="line">    int idx = 0;</span><br><span class="line">    for (int i = 0; i &lt; len; i++) &#123;</span><br><span class="line">        if (src[i] == &#x27;\t&#x27;) &#123;</span><br><span class="line">            new_str[idx++] = &#x27; &#x27;;</span><br><span class="line">            new_str[idx++] = &#x27; &#x27;;</span><br><span class="line">            new_str[idx++] = &#x27; &#x27;;</span><br><span class="line">            new_str[idx++] = &#x27; &#x27;;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            new_str[idx++] = src[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    new_str[idx] = &#x27;\0&#x27;;</span><br><span class="line">    </span><br><span class="line">    return new_str;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// ====================== 加载 camera 配置（基于 CJSON） ======================</span><br><span class="line">static int load_camera_config(CameraItem cameras[], int *count) &#123;</span><br><span class="line">    *count = 0;</span><br><span class="line">    FILE *fp = fopen(CONFIG_PATH, &quot;r&quot;);</span><br><span class="line">    if (!fp) &#123;</span><br><span class="line">        return -1; // 文件不存在</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 读取文件全部内容</span><br><span class="line">    fseek(fp, 0, SEEK_END);</span><br><span class="line">    long file_size = ftell(fp);</span><br><span class="line">    fseek(fp, 0, SEEK_SET);</span><br><span class="line">    </span><br><span class="line">    char *json_buf = (char*)malloc(file_size + 1);</span><br><span class="line">    if (!json_buf) &#123;</span><br><span class="line">        fclose(fp);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    fread(json_buf, 1, file_size, fp);</span><br><span class="line">    json_buf[file_size] = &#x27;\0&#x27;;</span><br><span class="line">    fclose(fp);</span><br><span class="line"></span><br><span class="line">    // 解析整个 JSON 文档</span><br><span class="line">    cJSON *root = cJSON_Parse(json_buf);</span><br><span class="line">    free(json_buf);</span><br><span class="line">    if (!root) &#123;</span><br><span class="line">        const char *error_ptr = cJSON_GetErrorPtr();</span><br><span class="line">        if (error_ptr) &#123;</span><br><span class="line">            fprintf(stderr, &quot;CJSON 解析错误: %s\n&quot;, error_ptr);</span><br><span class="line">        &#125;</span><br><span class="line">        return -2; // JSON 解析失败</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 查找 camera 数组节点</span><br><span class="line">    cJSON *camera_array = cJSON_GetObjectItemCaseSensitive(root, &quot;camera&quot;);</span><br><span class="line">    if (!camera_array || !cJSON_IsArray(camera_array)) &#123;</span><br><span class="line">        cJSON_Delete(root);</span><br><span class="line">        return -3; // 无 camera 数组</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 遍历 camera 数组</span><br><span class="line">    int cam_idx = 0;</span><br><span class="line">    cJSON *camera_item = NULL;</span><br><span class="line">    cJSON_ArrayForEach(camera_item, camera_array) &#123;</span><br><span class="line">        if (cam_idx &gt;= MAX_CAMERA_NUM) break;</span><br><span class="line">        if (!cJSON_IsObject(camera_item)) continue;</span><br><span class="line"></span><br><span class="line">        CameraItem *cam = &amp;cameras[cam_idx];</span><br><span class="line">        memset(cam, 0, sizeof(CameraItem));</span><br><span class="line"></span><br><span class="line">        // 解析 ID 字段</span><br><span class="line">        cJSON *id = cJSON_GetObjectItemCaseSensitive(camera_item, &quot;ID&quot;);</span><br><span class="line">        if (cJSON_IsString(id) &amp;&amp; (id-&gt;valuestring != NULL)) &#123;</span><br><span class="line">            safe_strcpy(cam-&gt;id, id-&gt;valuestring, sizeof(cam-&gt;id));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 解析 NUM 字段</span><br><span class="line">        cJSON *num = cJSON_GetObjectItemCaseSensitive(camera_item, &quot;NUM&quot;);</span><br><span class="line">        if (cJSON_IsNumber(num)) &#123;</span><br><span class="line">            cam-&gt;num = num-&gt;valueint;</span><br><span class="line">            if (cam-&gt;num &gt; MAX_ECODE_PER_CAMERA) &#123;</span><br><span class="line">                cam-&gt;num = MAX_ECODE_PER_CAMERA;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 解析 ECODE 数组</span><br><span class="line">        cJSON *ecode_array = cJSON_GetObjectItemCaseSensitive(camera_item, &quot;ECODE&quot;);</span><br><span class="line">        if (cJSON_IsArray(ecode_array)) &#123;</span><br><span class="line">            int ecode_idx = 0;</span><br><span class="line">            cJSON *ecode_item = NULL;</span><br><span class="line">            cJSON_ArrayForEach(ecode_item, ecode_array) &#123;</span><br><span class="line">                if (ecode_idx &gt;= MAX_ECODE_PER_CAMERA) break;</span><br><span class="line">                if (cJSON_IsString(ecode_item) &amp;&amp; (ecode_item-&gt;valuestring != NULL)) &#123;</span><br><span class="line">                    safe_strcpy(cam-&gt;ecode[ecode_idx], ecode_item-&gt;valuestring, sizeof(cam-&gt;ecode[ecode_idx]));</span><br><span class="line">                    ecode_idx++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            cam-&gt;num = ecode_idx;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 解析 INITVAL 数组</span><br><span class="line">        cJSON *initval_array = cJSON_GetObjectItemCaseSensitive(camera_item, &quot;INITVAL&quot;);</span><br><span class="line">        if (cJSON_IsArray(initval_array)) &#123;</span><br><span class="line">            int initval_idx = 0;</span><br><span class="line">            cJSON *initval_item = NULL;</span><br><span class="line">            cJSON_ArrayForEach(initval_item, initval_array) &#123;</span><br><span class="line">                if (initval_idx &gt;= MAX_INITVAL_PER_CAMERA) break;</span><br><span class="line">                if (cJSON_IsNumber(initval_item)) &#123;</span><br><span class="line">                    cam-&gt;initval[initval_idx] = initval_item-&gt;valuedouble;</span><br><span class="line">                    initval_idx++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            // 不足的 INITVAL 补 0</span><br><span class="line">            for (int i = initval_idx; i &lt; cam-&gt;num * INITVAL_PER_ECODE; i++) &#123;</span><br><span class="line">                cam-&gt;initval[i] = 0.0;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        cam_idx++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cJSON_Delete(root);</span><br><span class="line">    *count = cam_idx;</span><br><span class="line">    return (cam_idx &gt; 0) ? 0 : -4;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// ====================== 保存 camera 配置（基于 CJSON） ======================</span><br><span class="line">static int save_camera_config(const CameraItem cameras[], int count) &#123;</span><br><span class="line">    // 1. 读取原始 JSON 文件</span><br><span class="line">    FILE *fp = fopen(CONFIG_PATH, &quot;r&quot;);</span><br><span class="line">    if (!fp) &#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fseek(fp, 0, SEEK_END);</span><br><span class="line">    long file_size = ftell(fp);</span><br><span class="line">    fseek(fp, 0, SEEK_SET);</span><br><span class="line">    </span><br><span class="line">    char *json_buf = (char*)malloc(file_size + 1);</span><br><span class="line">    if (!json_buf) &#123;</span><br><span class="line">        fclose(fp);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    fread(json_buf, 1, file_size, fp);</span><br><span class="line">    json_buf[file_size] = &#x27;\0&#x27;;</span><br><span class="line">    fclose(fp);</span><br><span class="line"></span><br><span class="line">    // 2. 解析原始 JSON</span><br><span class="line">    cJSON *root = cJSON_Parse(json_buf);</span><br><span class="line">    free(json_buf);</span><br><span class="line">    if (!root) &#123;</span><br><span class="line">        return -2; // JSON 解析失败</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 3. 删除原有 camera 节点</span><br><span class="line">    cJSON_DeleteItemFromObjectCaseSensitive(root, &quot;camera&quot;);</span><br><span class="line"></span><br><span class="line">    // 4. 创建新的 camera 数组</span><br><span class="line">    cJSON *new_camera_array = cJSON_CreateArray();</span><br><span class="line">    if (!new_camera_array) &#123;</span><br><span class="line">        cJSON_Delete(root);</span><br><span class="line">        return -3;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 5. 填充新的 camera 数据</span><br><span class="line">    for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">        const CameraItem *cam = &amp;cameras[i];</span><br><span class="line">        cJSON *camera_obj = cJSON_CreateObject();</span><br><span class="line">        </span><br><span class="line">        // 添加 ID 字段</span><br><span class="line">        cJSON_AddStringToObject(camera_obj, &quot;ID&quot;, cam-&gt;id);</span><br><span class="line">        </span><br><span class="line">        // 添加 NUM 字段</span><br><span class="line">        cJSON_AddNumberToObject(camera_obj, &quot;NUM&quot;, cam-&gt;num);</span><br><span class="line">        </span><br><span class="line">        // 添加 ECODE 数组</span><br><span class="line">        cJSON *ecode_array = cJSON_CreateArray();</span><br><span class="line">        for (int j = 0; j &lt; cam-&gt;num; j++) &#123;</span><br><span class="line">            if (strlen(cam-&gt;ecode[j]) &gt; 0) &#123;</span><br><span class="line">                cJSON_AddItemToArray(ecode_array, cJSON_CreateString(cam-&gt;ecode[j]));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        cJSON_AddItemToObject(camera_obj, &quot;ECODE&quot;, ecode_array);</span><br><span class="line">        </span><br><span class="line">        // 添加 INITVAL 数组</span><br><span class="line">        cJSON *initval_array = cJSON_CreateArray();</span><br><span class="line">        int initval_total = cam-&gt;num * INITVAL_PER_ECODE;</span><br><span class="line">        for (int j = 0; j &lt; initval_total; j++) &#123;</span><br><span class="line">            cJSON_AddItemToArray(initval_array, cJSON_CreateNumber(cam-&gt;initval[j]));</span><br><span class="line">        &#125;</span><br><span class="line">        cJSON_AddItemToObject(camera_obj, &quot;INITVAL&quot;, initval_array);</span><br><span class="line">        </span><br><span class="line">        // 将 camera 对象加入数组</span><br><span class="line">        cJSON_AddItemToArray(new_camera_array, camera_obj);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 6. 将新的 camera 数组添加到根节点</span><br><span class="line">    cJSON_AddItemToObject(root, &quot;camera&quot;, new_camera_array);</span><br><span class="line"></span><br><span class="line">    // 7. 生成 JSON 字符串（旧版 cJSON，含 Tab 缩进）</span><br><span class="line">    char *tab_json_str = cJSON_Print(root);</span><br><span class="line">    cJSON_Delete(root);</span><br><span class="line">    if (!tab_json_str) &#123;</span><br><span class="line">        return -4;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 8. 替换 Tab 为 4 个空格（核心！解决 Tab 问题）</span><br><span class="line">    char *new_json_str = replace_tab_with_space(tab_json_str);</span><br><span class="line">    free(tab_json_str); // 释放原字符串</span><br><span class="line">    if (!new_json_str) &#123;</span><br><span class="line">        return -5;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 9. 写入临时文件</span><br><span class="line">    char temp_path[256];</span><br><span class="line">    snprintf(temp_path, sizeof(temp_path), &quot;%s.tmp&quot;, CONFIG_PATH);</span><br><span class="line">    fp = fopen(temp_path, &quot;w&quot;);</span><br><span class="line">    if (!fp) &#123;</span><br><span class="line">        free(new_json_str);</span><br><span class="line">        return -6;</span><br><span class="line">    &#125;</span><br><span class="line">    fputs(new_json_str, fp);</span><br><span class="line">    fclose(fp);</span><br><span class="line">    free(new_json_str);</span><br><span class="line"></span><br><span class="line">    // 10. 替换原文件</span><br><span class="line">    if (rename(temp_path, CONFIG_PATH) != 0) &#123;</span><br><span class="line">        unlink(temp_path);</span><br><span class="line">        return -7;</span><br><span class="line">    &#125;</span><br><span class="line">    chmod(CONFIG_PATH, 0644);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// ====================== HTML 生成 ======================</span><br><span class="line">static void generate_html(const CameraItem cameras[], int count, const char *msg, int is_success) &#123;</span><br><span class="line">    cgiHeaderContentType(&quot;text/html; charset=GBK&quot;);</span><br><span class="line"></span><br><span class="line">    fprintf(cgiOut, &quot;&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&#x27;GBK&#x27;&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;title&gt;摄像头配置管理&lt;/title&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;style&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;body &#123;font-family: Arial; margin:20px; background:#f5f5f5;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.container &#123;max-width:1200px; margin:0 auto; background:white; padding:20px; border-radius:8px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;h1 &#123;color:white; background:#007bff; padding:15px; border-radius:8px; text-align:center; margin:0 0 20px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.camera-card &#123;border:1px solid #000; border-radius:4px; margin:15px 0; padding:15px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.form-item &#123;margin:10px 0;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;label &#123;display:inline-block; width:80px; text-align:right; margin-right:10px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;input[type=&#x27;text&#x27;], input[type=&#x27;number&#x27;] &#123;padding:6px; border:1px solid #ccc; border-radius:4px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;input[type=&#x27;text&#x27;] &#123;width:200px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;input[type=&#x27;number&#x27;] &#123;width:100px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.ecode-table &#123;margin:15px 0; border-collapse:collapse; width:100%%;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.ecode-table th &#123;background:#f0f0f0; padding:8px; text-align:center;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.ecode-table td &#123;padding:6px; text-align:center;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.btn &#123;padding:6px 12px; background:#007bff; color:white; border:none; border-radius:4px; cursor:pointer;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.btn:hover &#123;background:#0056b3;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.btn-danger &#123;background:#dc3545;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.btn-danger:hover &#123;background:#bd2130;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.fixed-save-btn &#123;position:fixed; bottom:30px; right:30px; padding:12px 24px; background:#007bff; color:white; border:none; border-radius:4px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,123,0.3); font-size:14px; line-height:1.5; transition: background-color 0.2s ease;&#125;\n&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.fixed-save-btn:hover &#123;background:#0056b3; box-shadow:0 4px 12px rgba(0,86,179,0.4);&#125;\n&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.fixed-home-btn &#123;position:fixed; bottom:90px; right:30px; padding:12px 24px; background:#6c757d; color:white; border:none; border-radius:4px; cursor:pointer; text-decoration:none; box-shadow:0 2px 8px rgba(0,0,0,0.2); font-size:14px; line-height:1.5; transition: background-color 0.2s ease;&#125;\n&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.fixed-home-btn:hover &#123;background:#5a6268; box-shadow:0 4px 12px rgba(90,98,104,0.4);&#125;\n&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.msg &#123;padding:10px; margin:15px 0; border-radius:4px;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.success &#123;background:#d4edda; color:#155724;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.error &#123;background:#f8d7da; color:#721c24;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;.num-display &#123;font-weight:bold; color:#007bff;&#125;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;/style&gt;&quot;);</span><br><span class="line">  </span><br><span class="line">    fprintf(cgiOut, &quot;&lt;/head&gt;&lt;body&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;div class=&#x27;container&#x27;&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;h1&gt;摄像头配置管理&lt;/h1&gt;&quot;);</span><br><span class="line"></span><br><span class="line">    if (msg &amp;&amp; strlen(msg) &gt; 0) &#123;</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;msg %s&#x27;&gt;%s&lt;/div&gt;&quot;, is_success ? &quot;success&quot; : &quot;error&quot;, msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fprintf(cgiOut, &quot;&lt;form method=&#x27;POST&#x27;&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;button type=&#x27;submit&#x27; class=&#x27;fixed-save-btn&#x27;&gt;保存配置&lt;/button&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;a href=&#x27;/index.cgi&#x27; class=&#x27;fixed-home-btn&#x27;&gt;返回主页&lt;/a&gt;&quot;);</span><br><span class="line"></span><br><span class="line">    for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">        const CameraItem *cam = &amp;cameras[i];</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;camera-card&#x27;&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;h3 style=&#x27;font-size:20px; text-align:center;&#x27;&gt;摄像头 %d&lt;/h3&gt;&quot;, i+1);</span><br><span class="line"></span><br><span class="line">        // ID</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;label&gt;ID：&lt;/label&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;input type=&#x27;text&#x27; name=&#x27;camera_id_%d&#x27; value=&#x27;%s&#x27; maxlength=&#x27;63&#x27;&gt;&quot;, i, cam-&gt;id);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">        // NUM 只读显示</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;div class=&#x27;form-item&#x27;&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;label&gt;NUM：&lt;/label&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;span class=&#x27;num-display&#x27; id=&#x27;num_%d&#x27;&gt;%d&lt;/span&gt;&quot;, i, cam-&gt;num);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line"></span><br><span class="line">        // ECODE 表格</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;table class=&#x27;ecode-table&#x27; id=&#x27;ecode-table-%d&#x27; border=&#x27;1&#x27;&gt;&quot;, i);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;序号&lt;/th&gt;&lt;th&gt;ECODE&lt;/th&gt;&lt;th&gt;INITVAL 1&lt;/th&gt;&lt;th&gt;INITVAL 2&lt;/th&gt;&lt;th&gt;操作&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;tbody&gt;&quot;);</span><br><span class="line"></span><br><span class="line">        int ecode_num = cam-&gt;num;</span><br><span class="line">        for (int j = 0; j &lt; ecode_num; j++) &#123;</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;tr&gt;&quot;);</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;td&gt;%d&lt;/td&gt;&quot;, j+1);</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;td&gt;&lt;input type=&#x27;text&#x27; name=&#x27;camera_ecode_%d_%d&#x27; value=&#x27;%s&#x27; placeholder=&#x27;ECODE&#x27; required&gt;&lt;/td&gt;&quot;, i, j, cam-&gt;ecode[j]);</span><br><span class="line">            double val0 = cam-&gt;initval[j*2];</span><br><span class="line">            double val1 = cam-&gt;initval[j*2+1];</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;td&gt;&lt;input type=&#x27;number&#x27; name=&#x27;camera_initval_%d_%d_0&#x27; value=&#x27;%.2f&#x27; step=&#x27;0.01&#x27;&gt;&lt;/td&gt;&quot;, i, j, val0);</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;td&gt;&lt;input type=&#x27;number&#x27; name=&#x27;camera_initval_%d_%d_1&#x27; value=&#x27;%.2f&#x27; step=&#x27;0.01&#x27;&gt;&lt;/td&gt;&quot;, i, j, val1);</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;td&gt;&lt;button type=&#x27;button&#x27; class=&#x27;btn btn-danger&#x27; onclick=&#x27;deleteRow(this,%d)&#x27;&gt;删除&lt;/button&gt;&lt;/td&gt;&quot;, i);</span><br><span class="line">            fprintf(cgiOut, &quot;&lt;/tr&gt;&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/tbody&gt;&quot;);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/table&gt;&quot;);</span><br><span class="line"></span><br><span class="line">        // 添加行按钮</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;button type=&#x27;button&#x27; class=&#x27;btn&#x27; onclick=&#x27;addRow(%d)&#x27;&gt;添加 ECODE 行&lt;/button&gt;&quot;, i);</span><br><span class="line">        fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fprintf(cgiOut, &quot;&lt;/form&gt;&quot;);</span><br><span class="line">	</span><br><span class="line">	fprintf(cgiOut, &quot;&lt;script&gt;\n&quot;</span><br><span class="line">&quot;function addRow(cameraIdx) &#123;\n&quot;</span><br><span class="line">&quot;  var table = document.getElementById(&#x27;ecode-table-&#x27;+cameraIdx);\n&quot;</span><br><span class="line">&quot;  var tbody = table.tBodies[0];\n&quot;</span><br><span class="line">&quot;  var newRow = tbody.insertRow();\n&quot;</span><br><span class="line">&quot;  var rowIdx = tbody.rows.length - 1;\n&quot;</span><br><span class="line">&quot;  newRow.innerHTML = &#x27;&lt;td&gt;&#x27; + (rowIdx+1) + &#x27;&lt;/td&gt;&#x27; +\n&quot;</span><br><span class="line">&quot;    &#x27;&lt;td&gt;&lt;input type=\&quot;text\&quot; name=\&quot;camera_ecode_&#x27;+cameraIdx+&#x27;_&#x27;+rowIdx+&#x27;\&quot; value=\&quot;\&quot; placeholder=\&quot;ECODE\&quot; required&gt;&lt;/td&gt;&#x27; +\n&quot;</span><br><span class="line">&quot;    &#x27;&lt;td&gt;&lt;input type=\&quot;number\&quot; name=\&quot;camera_initval_&#x27;+cameraIdx+&#x27;_&#x27;+rowIdx+&#x27;_0\&quot; value=\&quot;0.0\&quot; step=\&quot;0.01\&quot;&gt;&lt;/td&gt;&#x27; +\n&quot;</span><br><span class="line">&quot;    &#x27;&lt;td&gt;&lt;input type=\&quot;number\&quot; name=\&quot;camera_initval_&#x27;+cameraIdx+&#x27;_&#x27;+rowIdx+&#x27;_1\&quot; value=\&quot;0.0\&quot; step=\&quot;0.01\&quot;&gt;&lt;/td&gt;&#x27; +\n&quot;</span><br><span class="line">&quot;    &#x27;&lt;td&gt;&lt;button type=\&quot;button\&quot; class=\&quot;btn btn-danger\&quot; onclick=\&quot;deleteRow(this,&#x27;+cameraIdx+&#x27;)\&quot;&gt;删除&lt;/button&gt;&lt;/td&gt;&#x27;;\n&quot;</span><br><span class="line">&quot;  updateNum(cameraIdx);\n&quot;</span><br><span class="line">&quot;&#125;\n&quot;</span><br><span class="line">&quot;function deleteRow(btn, cameraIdx) &#123;\n&quot;</span><br><span class="line">&quot;  var row = btn.parentNode.parentNode;\n&quot;</span><br><span class="line">&quot;  var table = document.getElementById(&#x27;ecode-table-&#x27;+cameraIdx);\n&quot;</span><br><span class="line">&quot;  var tbody = table.tBodies[0];\n&quot;</span><br><span class="line">&quot;  var rowIdx = row.sectionRowIndex;\n&quot;</span><br><span class="line">&quot;  tbody.deleteRow(rowIdx);\n&quot;</span><br><span class="line">&quot;  for (var i = rowIdx; i &lt; tbody.rows.length; i++) &#123;\n&quot;</span><br><span class="line">&quot;    var r = tbody.rows[i];\n&quot;</span><br><span class="line">&quot;    var cells = r.cells;\n&quot;</span><br><span class="line">&quot;    cells[0].innerText = i+1;\n&quot;</span><br><span class="line">&quot;    var ecodeInput = cells[1].getElementsByTagName(&#x27;input&#x27;)[0];\n&quot;</span><br><span class="line">&quot;    ecodeInput.name = &#x27;camera_ecode_&#x27;+cameraIdx+&#x27;_&#x27;+i;\n&quot;</span><br><span class="line">&quot;    var initval0 = cells[2].getElementsByTagName(&#x27;input&#x27;)[0];\n&quot;</span><br><span class="line">&quot;    initval0.name = &#x27;camera_initval_&#x27;+cameraIdx+&#x27;_&#x27;+i+&#x27;_0&#x27;;\n&quot;</span><br><span class="line">&quot;    var initval1 = cells[3].getElementsByTagName(&#x27;input&#x27;)[0];\n&quot;</span><br><span class="line">&quot;    initval1.name = &#x27;camera_initval_&#x27;+cameraIdx+&#x27;_&#x27;+i+&#x27;_1&#x27;;\n&quot;</span><br><span class="line">&quot;  &#125;\n&quot;</span><br><span class="line">&quot;  updateNum(cameraIdx);\n&quot;</span><br><span class="line">&quot;&#125;\n&quot;</span><br><span class="line">&quot;function updateNum(cameraIdx) &#123;\n&quot;</span><br><span class="line">&quot;  var table = document.getElementById(&#x27;ecode-table-&#x27;+cameraIdx);\n&quot;</span><br><span class="line">&quot;  var rowCount = table.tBodies[0].rows.length;\n&quot;</span><br><span class="line">&quot;  document.getElementById(&#x27;num_&#x27;+cameraIdx).innerText = rowCount;\n&quot;</span><br><span class="line">&quot;&#125;\n&quot;</span><br><span class="line">&quot;&lt;/script&gt;\n&quot;);</span><br><span class="line">	</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;/div&gt;&quot;);</span><br><span class="line">    fprintf(cgiOut, &quot;&lt;/body&gt;&lt;/html&gt;&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// ====================== CGIC 主函数 ======================</span><br><span class="line">int cgiMain() &#123;</span><br><span class="line">    CameraItem cameras[MAX_CAMERA_NUM];</span><br><span class="line">    int camera_count = 0;</span><br><span class="line">    char msg[256] = &#123;0&#125;;</span><br><span class="line">    int is_success = 0;</span><br><span class="line"></span><br><span class="line">    // 加载配置</span><br><span class="line">    int load_ret = load_camera_config(cameras, &amp;camera_count);</span><br><span class="line">    if (load_ret != 0 || camera_count == 0) &#123;</span><br><span class="line">        // 若无配置，创建两个空摄像头示例</span><br><span class="line">        camera_count = 2;</span><br><span class="line">        for (int i = 0; i &lt; camera_count; i++) &#123;</span><br><span class="line">            cameras[i].id[0] = &#x27;\0&#x27;;</span><br><span class="line">            cameras[i].num = 0;</span><br><span class="line">            for (int j = 0; j &lt; MAX_ECODE_PER_CAMERA; j++) &#123;</span><br><span class="line">                cameras[i].ecode[j][0] = &#x27;\0&#x27;;</span><br><span class="line">                cameras[i].initval[j*2] = 0.0;</span><br><span class="line">                cameras[i].initval[j*2+1] = 0.0;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        snprintf(msg, sizeof(msg), &quot;加载配置失败或为空，已创建默认空摄像头&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 处理 POST 提交</span><br><span class="line">    if (strcmp(cgiRequestMethod, &quot;POST&quot;) == 0) &#123;</span><br><span class="line">        for (int i = 0; i &lt; camera_count; i++) &#123;</span><br><span class="line">            char field[64];</span><br><span class="line">            snprintf(field, sizeof(field), &quot;camera_id_%d&quot;, i);</span><br><span class="line">            cgiFormString(field, cameras[i].id, sizeof(cameras[i].id));</span><br><span class="line"></span><br><span class="line">            // 清空当前摄像头数据</span><br><span class="line">            cameras[i].num = 0;</span><br><span class="line">            for (int j = 0; j &lt; MAX_ECODE_PER_CAMERA; j++) &#123;</span><br><span class="line">                cameras[i].ecode[j][0] = &#x27;\0&#x27;;</span><br><span class="line">                cameras[i].initval[j*2] = 0.0;</span><br><span class="line">                cameras[i].initval[j*2+1] = 0.0;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // 收集非空 ECODE 行</span><br><span class="line">            int ecode_idx = 0;</span><br><span class="line">            for (int j = 0; j &lt; MAX_ECODE_PER_CAMERA; j++) &#123;</span><br><span class="line">                char ecode_field[64];</span><br><span class="line">                snprintf(ecode_field, sizeof(ecode_field), &quot;camera_ecode_%d_%d&quot;, i, j);</span><br><span class="line">                char ecode_val[64] = &quot;&quot;;</span><br><span class="line">                int ret = cgiFormString(ecode_field, ecode_val, sizeof(ecode_val));</span><br><span class="line">                </span><br><span class="line">                if (ret == cgiFormSuccess &amp;&amp; strlen(ecode_val) &gt; 0 &amp;&amp; ecode_idx &lt; MAX_ECODE_PER_CAMERA) &#123;</span><br><span class="line">                    safe_strcpy(cameras[i].ecode[ecode_idx], ecode_val, 64);</span><br><span class="line"></span><br><span class="line">                    // 读取 INITVAL</span><br><span class="line">                    char initval_field0[64], initval_field1[64];</span><br><span class="line">                    snprintf(initval_field0, sizeof(initval_field0), &quot;camera_initval_%d_%d_0&quot;, i, j);</span><br><span class="line">                    snprintf(initval_field1, sizeof(initval_field1), &quot;camera_initval_%d_%d_1&quot;, i, j);</span><br><span class="line">                    double val0 = 0.0, val1 = 0.0;</span><br><span class="line">                    cgiFormDouble(initval_field0, &amp;val0, 0.0);</span><br><span class="line">                    cgiFormDouble(initval_field1, &amp;val1, 0.0);</span><br><span class="line">                    </span><br><span class="line">                    cameras[i].initval[ecode_idx * 2] = val0;</span><br><span class="line">                    cameras[i].initval[ecode_idx * 2 + 1] = val1;</span><br><span class="line">                    ecode_idx++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            cameras[i].num = ecode_idx;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 保存配置</span><br><span class="line">        int save_ret = save_camera_config(cameras, camera_count);</span><br><span class="line">        if (save_ret == 0) &#123;</span><br><span class="line">            snprintf(msg, sizeof(msg), &quot;配置保存成功！&quot;);</span><br><span class="line">            is_success = 1;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            snprintf(msg, sizeof(msg), &quot;保存失败，错误码：%d&quot;, save_ret);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    generate_html(cameras, camera_count, msg, is_success);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="3-sensor-params-c引入cJSON代码"><a href="#3-sensor-params-c引入cJSON代码" class="headerlink" title="3 sensor-params.c引入cJSON代码"></a>3 sensor-params.c引入cJSON代码</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;yb&quot;:    &#123;</span><br><span class="line">        &quot;PORT&quot;:    7788,</span><br><span class="line">        &quot;FREQ&quot;:    1,</span><br><span class="line">        &quot;NUM&quot;:    6,</span><br><span class="line">        &quot;ECODE&quot;:    [&quot;ZMDQ-RSG-G02-01&quot;, &quot;ZMDQ-RSG-G02-02&quot;, &quot;ZMDQ-RSG-G02-03&quot;, &quot;ZMDQ-RSG-G03-01&quot;, &quot;ZMDQ-RSG-G03-02&quot;, &quot;ZMDQ-RSG-G03-03&quot;],</span><br><span class="line">        &quot;INITVAL&quot;:    [0, 0, 0, 0, 0, 0]</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;TYPE&quot;:    [4, 2, 5, 0, 0],</span><br><span class="line">    &quot;PARAMS&quot;:    [&#123;</span><br><span class="line">            &quot;WAY&quot;:    1,</span><br><span class="line">            &quot;TCP&quot;:    &#123;</span><br><span class="line">                &quot;IP&quot;:    &quot;192.168.1.105&quot;,</span><br><span class="line">                &quot;PORT&quot;:    8886</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;USART&quot;:    &#123;</span><br><span class="line">                &quot;CHN&quot;:    1,</span><br><span class="line">                &quot;BAUD&quot;:    9600,</span><br><span class="line">                &quot;PARITY&quot;:    0</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;FREQ&quot;:    5,</span><br><span class="line">            &quot;ADDR&quot;:    [1, 2, 3, 4, 5, 6],</span><br><span class="line">            &quot;ECODE&quot;:    [&quot;ZMDQ-INC-P05-01&quot;, &quot;ZMDQ-INC-P05-02&quot;, &quot;ZMDQ-INC-P04-01&quot;, &quot;ZMDQ-INC-P04-02&quot;, &quot;ZMDQ-INC-P03-02&quot;, &quot;ZMDQ-INC-P03-01&quot;],</span><br><span class="line">            &quot;INITVAL&quot;:    [-0.3, 0.29, 10, 0.14, -0.7, 10, 0.25, 0.09, 10, 0.49, -0.75, 10, 0.01, -0.44, 10, -0.24, 0.12, 10],</span><br><span class="line">            &quot;NUM&quot;:    6</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            &quot;WAY&quot;:    0,</span><br><span class="line">            &quot;TCP&quot;:    &#123;</span><br><span class="line">                &quot;IP&quot;:    &quot;192.168.3.124&quot;,</span><br><span class="line">                &quot;PORT&quot;:    6677</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;USART&quot;:    &#123;</span><br><span class="line">                &quot;CHN&quot;:    1,</span><br><span class="line">                &quot;BAUD&quot;:    9600,</span><br><span class="line">                &quot;PARITY&quot;:    0</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;FREQ&quot;:    2,</span><br><span class="line">            &quot;ADDR&quot;:    [1, 2, 3],</span><br><span class="line">            &quot;ECODE&quot;:    [&quot;ZMDQ-RTS-G01-01&quot;, &quot;ZMDQ-RTS-G01-02&quot;, &quot;ZMDQ-RTS-G01-03&quot;],</span><br><span class="line">            &quot;INITVAL&quot;:    [10, 10, 10, 11, 11, 11, 12, 12, 12],</span><br><span class="line">            &quot;NUM&quot;:    3</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            &quot;WAY&quot;:    0,</span><br><span class="line">            &quot;TCP&quot;:    &#123;</span><br><span class="line">                &quot;IP&quot;:    &quot;192.168.1.231&quot;,</span><br><span class="line">                &quot;PORT&quot;:    2311</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;USART&quot;:    &#123;</span><br><span class="line">                &quot;CHN&quot;:    2,</span><br><span class="line">                &quot;BAUD&quot;:    9600,</span><br><span class="line">                &quot;PARITY&quot;:    0</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;FREQ&quot;:    2,</span><br><span class="line">            &quot;ADDR&quot;:    [1],</span><br><span class="line">            &quot;ECODE&quot;:    [&quot;ZMDQ-WLI-G01-01&quot;],</span><br><span class="line">            &quot;INITVAL&quot;:    [10, 0, 0],</span><br><span class="line">            &quot;NUM&quot;:    1</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            &quot;WAY&quot;:    0,</span><br><span class="line">            &quot;TCP&quot;:    &#123;</span><br><span class="line">                &quot;IP&quot;:    &quot;192.168.2.151&quot;,</span><br><span class="line">                &quot;PORT&quot;:    61513</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;USART&quot;:    &#123;</span><br><span class="line">                &quot;CHN&quot;:    3,</span><br><span class="line">                &quot;BAUD&quot;:    9600,</span><br><span class="line">                &quot;PARITY&quot;:    0</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;FREQ&quot;:    2,</span><br><span class="line">            &quot;ADDR&quot;:    [1, 2],</span><br><span class="line">            &quot;ECODE&quot;:    [&quot;ZMDQ-DIS-P01-01&quot;, &quot;ZMDQ-DIS-P01-02&quot;],</span><br><span class="line">            &quot;INITVAL&quot;:    [33089.67, 33104.85, 0, 0, 0, 0],</span><br><span class="line">            &quot;NUM&quot;:    2</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            &quot;WAY&quot;:    0,</span><br><span class="line">            &quot;TCP&quot;:    &#123;</span><br><span class="line">                &quot;IP&quot;:    &quot;192.168.2.151&quot;,</span><br><span class="line">                &quot;PORT&quot;:    61513</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;USART&quot;:    &#123;</span><br><span class="line">                &quot;CHN&quot;:    4,</span><br><span class="line">                &quot;BAUD&quot;:    9600,</span><br><span class="line">                &quot;PARITY&quot;:    0</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;FREQ&quot;:    2,</span><br><span class="line">            &quot;ADDR&quot;:    [1, 2],</span><br><span class="line">            &quot;ECODE&quot;:    [&quot;ZMDQ-DIS-P06-02&quot;, &quot;ZMDQ-DIS-P06-03&quot;],</span><br><span class="line">            &quot;INITVAL&quot;:    [33065.68, 33170.03, 0, 0, 0, 0],</span><br><span class="line">            &quot;NUM&quot;:    2</span><br><span class="line">        &#125;],</span><br><span class="line">    &quot;camera&quot;:    [&#123;</span><br><span class="line">            &quot;ID&quot;:    &quot;A105202310010045&quot;,</span><br><span class="line">            &quot;NUM&quot;:    4,</span><br><span class="line">            &quot;ECODE&quot;:    [&quot;ZMDQ-DIS-G02-01&quot;, &quot;ZMDQ-DIS-G02-02&quot;, &quot;ZMDQ-DIS-G02-03&quot;, &quot;ZMDQ-DIS-G02-04&quot;],</span><br><span class="line">            &quot;INITVAL&quot;:    [63.64, 251.76, 1143.14, 214.54, 604.05, 239.34, 44444, 44444]</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            &quot;ID&quot;:    &quot;A10520231001003F&quot;,</span><br><span class="line">            &quot;NUM&quot;:    0,</span><br><span class="line">            &quot;ECODE&quot;:    [],</span><br><span class="line">            &quot;INITVAL&quot;:    []</span><br><span class="line">        &#125;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+		</div>
+
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/03/02/7%20Bos+cgi%E5%9C%A8%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%AE%BE%E5%A4%87%E5%BA%94%E7%94%A82/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">Boa+cgic在嵌入式设备应用2-sensor配置</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">部署cJSON</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81"><span class="nav-text">1 下载源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-sensor-camera-c%E5%BC%95%E5%85%A5cJSON%E4%BB%A3%E7%A0%81"><span class="nav-text">2 sensor-camera.c引入cJSON代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-sensor-params-c%E5%BC%95%E5%85%A5cJSON%E4%BB%A3%E7%A0%81"><span class="nav-text">3 sensor-params.c引入cJSON代码</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+		
+
+    
+		
+		
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+
+</main>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Swup.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/imageViewer.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/utils.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/main.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/navbarShrink.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/scrollTopBottom.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/lightDarkSwitch.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/categoryList.js" ></script>
+
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/codeBlock.js" ></script>
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/lazyload.js" ></script>
+
+
+
+
+
+  <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Typed.min.js" ></script>
+  <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/typed.js" ></script>
+
+
+
+
+
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/anime.min.js" ></script>
+
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/tocToggle.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/toc.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/tabs.js" data-swup-reload-script></script>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/essays.js" data-swup-reload-script></script>
+
+
+
+
+	
+</body>
+
+</html>
