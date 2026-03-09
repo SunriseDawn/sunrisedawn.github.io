@@ -100,7 +100,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sunrisedawn.github.io/images/eva1.png">
 <meta property="article:published_time" content="2026-03-04T07:31:12.148Z">
-<meta property="article:modified_time" content="2026-03-04T08:55:24.854Z">
+<meta property="article:modified_time" content="2026-03-09T01:02:07.513Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="教程">
 <meta name="twitter:card" content="summary">
@@ -332,7 +332,7 @@
 
         <div class="statistics flex justify-around my-2.5">
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
         <div class="label text-third-text-color text-sm">Tags</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
@@ -389,8 +389,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-04 16:55:24</span>
-            <span class="mobile">2026-03-04 16:55:24</span>
+            <span class="desktop">2026-03-09 09:02:07</span>
+            <span class="mobile">2026-03-09 09:02:07</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -427,8 +427,7 @@
 			<h2 id="1-下载源码"><a href="#1-下载源码" class="headerlink" title="1 下载源码"></a>1 下载源码</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/DaveGamble/cJSON</span><br></pre></td></tr></table></figure></div>
 
 <p>只复制 <code>cJSON.c</code> 和 <code>cJSON.h</code> 到项目目录；</p>
-<p><strong>编译指令，结合cgic</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gcc sensor-camera.c cJSON.c -o sensor-camera.cgi -I./home/zz/boaWork/www/cgi-bin/Sensor/CGIC/cgic-master -L./home/zz/boaWork/www/cgi-bin/Sensor/CGIC/cgic-master -lcgic -lm -Wall</span><br></pre></td></tr></table></figure></div>
+<h3 id="1-1-gcc编译指令，结合Cjson-cgic"><a href="#1-1-gcc编译指令，结合Cjson-cgic" class="headerlink" title="1.1 gcc编译指令，结合Cjson cgic"></a>1.1 <strong>gcc编译指令，结合Cjson cgic</strong></h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gcc sensor-camera.c cJSON.c -o sensor-camera.cgi -I./home/zz/boaWork/www/cgi-bin/Sensor/CGIC/cgic-master -L./home/zz/boaWork/www/cgi-bin/Sensor/CGIC/cgic-master -lcgic -lm -Wall</span><br></pre></td></tr></table></figure></div>
 
 <p><code>-I</code>：指定 <code>cgic.h</code> 头文件路径（如果需要）；</p>
 <p><code>-L</code>：指定 <code>cgic</code> 库路径；</p>
@@ -484,7 +483,7 @@
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">部署cJSON</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81"><span class="nav-text">1 下载源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-sensor-camera-c%E5%BC%95%E5%85%A5cJSON%E4%BB%A3%E7%A0%81"><span class="nav-text">2 sensor-camera.c引入cJSON代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-sensor-params-c%E5%BC%95%E5%85%A5cJSON%E4%BB%A3%E7%A0%81"><span class="nav-text">3 sensor-params.c引入cJSON代码</span></a></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81"><span class="nav-text">1 下载源码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-gcc%E7%BC%96%E8%AF%91%E6%8C%87%E4%BB%A4%EF%BC%8C%E7%BB%93%E5%90%88Cjson-cgic"><span class="nav-text">1.1 gcc编译指令，结合Cjson cgic</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-sensor-camera-c%E5%BC%95%E5%85%A5cJSON%E4%BB%A3%E7%A0%81"><span class="nav-text">2 sensor-camera.c引入cJSON代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-sensor-params-c%E5%BC%95%E5%85%A5cJSON%E4%BB%A3%E7%A0%81"><span class="nav-text">3 sensor-params.c引入cJSON代码</span></a></li></ol>
 
 	</div>
 </div>
