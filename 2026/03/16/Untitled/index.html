@@ -83,7 +83,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://sunrisedawn.github.io/2026/03/13/9 移植到嵌入式设备/"/>
+    <link rel="canonical" href="https://sunrisedawn.github.io/2026/03/16/untitled/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -93,16 +93,15 @@
         
         <meta name="description" content="dawn&#39;s blog">
 <meta property="og:type" content="article">
-<meta property="og:title" content="移植到嵌入式设备中">
-<meta property="og:url" content="https://sunrisedawn.github.io/2026/03/13/9%20%E7%A7%BB%E6%A4%8D%E5%88%B0%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%AE%BE%E5%A4%87/index.html">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://sunrisedawn.github.io/2026/03/16/Untitled/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="dawn&#39;s blog">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sunrisedawn.github.io/images/eva1.png">
-<meta property="article:published_time" content="2026-03-13T01:40:49.768Z">
-<meta property="article:modified_time" content="2026-03-16T02:37:11.227Z">
+<meta property="article:published_time" content="2026-03-16T03:32:01.063Z">
+<meta property="article:modified_time" content="2026-03-16T03:32:10.157Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="教程">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sunrisedawn.github.io/images/eva1.png">
     
@@ -116,7 +115,7 @@
     
     <title>
         
-            移植到嵌入式设备中 | dawn&#39;s blog
+            dawn&#39;s blog - 万象有序
         
     </title>
 
@@ -512,7 +511,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">移植到嵌入式设备中</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3"></h1>
 			</div>
 			
 		</div>
@@ -531,31 +530,20 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2026-03-13 09:40:49</span>
-        <span class="mobile">2026-03-13 09:40:49</span>
+        <span class="desktop">2026-03-16 11:32:01</span>
+        <span class="mobile">2026-03-16 11:32:01</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-16 10:37:11</span>
-            <span class="mobile">2026-03-16 10:37:11</span>
+            <span class="desktop">2026-03-16 11:32:10</span>
+            <span class="mobile">2026-03-16 11:32:10</span>
             <span class="hover-info">Updated</span>
         </span>
     
 
     
-    
-        <span class="article-tags article-meta-item">
-            <i class="fa-regular fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
     
 
     
@@ -573,41 +561,12 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h2 id="1-编译"><a href="#1-编译" class="headerlink" title="1 编译"></a>1 编译</h2><p>交叉工具链环境变量配置</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">. /opt/fsl-imx-x11/4.1.15-2.0.0/environment-setup-cortexa7hf-neon-poky-linux-gnueabi</span><br></pre></td></tr></table></figure></div>
+			<p>s</p>
 
-<p>gcc 进行静态编译，不能动态</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 交叉编译指令（以 ARM-Linux-GCC 为例，替换为你的交叉编译器）</span><br><span class="line">sudo arm-linux-gnueabihf-gcc \</span><br><span class="line">  sensor2-params.c cJSON.c cgic.c \  # 静态编译 cJSON/cgic 源码（避免动态库依赖）</span><br><span class="line">  -o sensor2-params.cgi \            # 输出目标文件</span><br><span class="line">  -I./                               # 头文件路径（cJSON.h/cgic.h 在当前目录）</span><br><span class="line">  -static \                          # 静态编译（关键！嵌入式优先静态编译）</span><br><span class="line">  -lm \                              # 链接数学库（如果用到 sqrt/三角函数等）</span><br><span class="line">  -Wall \                            # 开启警告，提前发现问题</span><br><span class="line">  -Os                                # 优化编译（减小程序体积，嵌入式必备）</span><br><span class="line">  </span><br></pre></td></tr></table></figure></div>
-
-
-
-<h3 id="1-1执行编译指令"><a href="#1-1执行编译指令" class="headerlink" title="1.1执行编译指令"></a>1.1<strong>执行编译指令</strong></h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo $CC system-config.c cJSON.c -o system-config.cgi -I/home/zz/boaWork/www/cgi-bin/Sensor/CGIC/cgic-master -L/home/zz/boaWork/www/cgi-bin/Sensor/CGIC/cgic-master -lcgic -lm -Wall -Os</span><br></pre></td></tr></table></figure></div>
-
-<p><code>libcgic.a</code> 库文件格式不被识别</p>
-<p>核心原因是这个静态库是用 <strong>x86 编译器（gcc）</strong> 编译的，但现在用的是 <strong>ARM 交叉编译器</strong></p>
-<h3 id="1-2重新编译-ARM-版本的-cgic-库"><a href="#1-2重新编译-ARM-版本的-cgic-库" class="headerlink" title="1.2重新编译 ARM 版本的 cgic 库"></a>1.2重新编译 ARM 版本的 cgic 库</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 用 $CC（arm-poky-linux-gnueabi-gcc）编译 cgic.c 为目标文件</span><br><span class="line">sudo $CC cgic.c -c -Wall -Os -o cgic.o</span><br><span class="line"># 将目标文件打包为 ARM 架构的静态库</span><br><span class="line">sudo ar rcs libcgic.a cgic.o</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
-
-
-
-
-
-<p>编译system-config.c，sensor-camera.c和sensor-params.c，sensor2.c需要cgic库和Cjson库</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo $CC system-config.c cJSON.c -o system-config.cgi -I/home/zz/boaWork/www/fcu1104CGI/cgic-master -L/home/zz/boaWork/www/fcu1104CGI/cgic-master -lcgic -lm -Wall -Os</span><br></pre></td></tr></table></figure></div>
-
-<p>编译index.c，modify_rc_local.c，直接编译</p>
-<h3 id="1-3-赋予移植的文件权限777"><a href="#1-3-赋予移植的文件权限777" class="headerlink" title="1.3 赋予移植的文件权限777"></a>1.3 赋予移植的文件权限777</h3>
 		</div>
 
 		
 
-		
-		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
-			
-			<li class="tag-item mx-0.5">
-				<a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>&nbsp;
-			</li>
-			
-		</ul>
 		
 
 		
@@ -615,23 +574,11 @@
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2026/03/16/Untitled/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48"></span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2026/03/04/8%20%E9%83%A8%E7%BD%B2cJSON/">
+				<a class="next" rel="next" href="/2026/03/13/9%20%E7%A7%BB%E6%A4%8D%E5%88%B0%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%AE%BE%E5%A4%87/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">部署cJSON</span>
+						<span class="post-nav-title-item truncate max-w-48">移植到嵌入式设备中</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -645,6 +592,47 @@
 
 
 		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.js';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
 	</div>
 
 	
@@ -652,8 +640,8 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">移植到嵌入式设备中</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BC%96%E8%AF%91"><span class="nav-text">1 编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1%E6%89%A7%E8%A1%8C%E7%BC%96%E8%AF%91%E6%8C%87%E4%BB%A4"><span class="nav-text">1.1执行编译指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2%E9%87%8D%E6%96%B0%E7%BC%96%E8%AF%91-ARM-%E7%89%88%E6%9C%AC%E7%9A%84-cgic-%E5%BA%93"><span class="nav-text">1.2重新编译 ARM 版本的 cgic 库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E8%B5%8B%E4%BA%88%E7%A7%BB%E6%A4%8D%E7%9A%84%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90777"><span class="nav-text">1.3 赋予移植的文件权限777</span></a></li></ol></li></ol>
+		<div class="page-title"></div>
+		
 
 	</div>
 </div>
@@ -683,6 +671,10 @@
 		
 
 		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
 		
 	</ul>
 </div>
