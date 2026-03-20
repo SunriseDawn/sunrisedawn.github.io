@@ -83,7 +83,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://sunrisedawn.github.io/2026/02/26/6 boa+cgic在嵌入式设备应用/"/>
+    <link rel="canonical" href="https://sunrisedawn.github.io/2026/03/19/10 边缘网关测试/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -93,14 +93,14 @@
         
         <meta name="description" content="dawn&#39;s blog">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Boa+cgic在嵌入式设备应用">
-<meta property="og:url" content="https://sunrisedawn.github.io/2026/02/26/6%20Boa+cgic%E5%9C%A8%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%AE%BE%E5%A4%87%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:title" content="边缘网关测试">
+<meta property="og:url" content="https://sunrisedawn.github.io/2026/03/19/10%20%E8%BE%B9%E7%BC%98%E7%BD%91%E5%85%B3%E6%B5%8B%E8%AF%95/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="dawn&#39;s blog">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sunrisedawn.github.io/images/eva1.png">
-<meta property="article:published_time" content="2026-02-26T08:19:18.433Z">
-<meta property="article:modified_time" content="2026-03-03T06:01:57.528Z">
+<meta property="article:published_time" content="2026-03-19T09:04:18.532Z">
+<meta property="article:modified_time" content="2026-03-20T05:42:46.727Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="教程">
 <meta name="twitter:card" content="summary">
@@ -116,7 +116,7 @@
     
     <title>
         
-            Boa+cgic在嵌入式设备应用 | dawn&#39;s blog
+            边缘网关测试 | dawn&#39;s blog
         
     </title>
 
@@ -363,7 +363,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Boa+cgic在嵌入式设备应用</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">边缘网关测试</h1>
 			</div>
 			
 		</div>
@@ -382,15 +382,15 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2026-02-26 16:19:18</span>
-        <span class="mobile">2026-02-26 16:19:18</span>
+        <span class="desktop">2026-03-19 17:04:18</span>
+        <span class="mobile">2026-03-19 17:04:18</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-03 14:01:57</span>
-            <span class="mobile">2026-03-03 14:01:57</span>
+            <span class="desktop">2026-03-20 13:42:46</span>
+            <span class="mobile">2026-03-20 13:42:46</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -424,68 +424,36 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h2><p>前面在VMware中linux系统正常运行boa服务器以及cgi程序正常。</p>
-<p>下面是在嵌入式设备中FCU1104的应用</p>
-<p>交叉工具链之前装好了</p>
-<p>arm-poky-linux-gnueabi-gcc</p>
-<h2 id="2-交叉编译"><a href="#2-交叉编译" class="headerlink" title="2 交叉编译"></a>2 交叉编译</h2><h3 id="2-1-编译boa"><a href="#2-1-编译boa" class="headerlink" title="2.1 编译boa"></a>2.1 编译boa</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 先清理之前的编译残留（如果有）</span><br><span class="line">make clean</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>但接下来make时总是出现错误，crtend.o&#x2F;crtn.o缺失问题后，又出现了cannot find -lc的报错（找不到 C 标准库libc)</strong></p>
-<p>需要修改makefile文件，内容全部替换到如下</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"># BOA Makefile for NXP i.MX (arm-poky-linux-gnueabi-gcc)</span><br><span class="line">CC = /opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/x86_64-pokysdk-linux/usr/bin/arm-poky-linux-gnueabi/arm-poky-linux-gnueabi-gcc</span><br><span class="line">CFLAGS = -g -O2 -pipe -Wall -I. \</span><br><span class="line">         --sysroot=/opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/cortexa7hf-neon-poky-linux-gnueabi \</span><br><span class="line">         -march=armv7-a -mfpu=neon -mfloat-abi=hard -mtune=cortex-a7</span><br><span class="line">LDFLAGS = --sysroot=/opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/cortexa7hf-neon-poky-linux-gnueabi</span><br><span class="line"></span><br><span class="line"># 依赖文件（无需修改）</span><br><span class="line">OBJS = y.tab.o lex.yy.o alias.o boa.o buffer.o cgi.o cgi_header.o \</span><br><span class="line">       config.o escape.o get.o hash.o ip.o log.o mmap_cache.o pipe.o \</span><br><span class="line">       queue.o read.o request.o response.o select.o signals.o util.o \</span><br><span class="line">       sublog.o timestamp.o</span><br><span class="line"></span><br><span class="line"># 目标编译规则</span><br><span class="line">boa: $(OBJS)</span><br><span class="line">	$(CC) $(CFLAGS) $(LDFLAGS) -o boa $(OBJS)</span><br><span class="line"></span><br><span class="line"># 语法解析文件生成规则</span><br><span class="line">y.tab.c y.tab.h: boa_grammar.y</span><br><span class="line">	bison -y -d boa_grammar.y</span><br><span class="line"></span><br><span class="line">lex.yy.c: boa_lexer.l</span><br><span class="line">	flex boa_lexer.l</span><br><span class="line"></span><br><span class="line"># 通用编译规则</span><br><span class="line">.c.o:</span><br><span class="line">	$(CC) $(CFLAGS) -c $&lt; -o $@</span><br><span class="line"></span><br><span class="line"># 清理规则</span><br><span class="line">clean:</span><br><span class="line">	rm -f $(OBJS) boa y.tab.c y.tab.h lex.yy.c core *~</span><br></pre></td></tr></table></figure></div>
-
-<p>上面MakeFIle文件解释说明：</p>
-<p><strong>修改一</strong></p>
-<p>告诉编译器「放弃找主机的库，去这个路径找 ARM 架构的库」—— 这个路径是 NXP 为 i.MX 设备预置的「目标系统根文件系统」，<br>里面包含完整的 ARM 架构crtend.o&#x2F;crtn.o&#x2F;libc.so等文件。</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--sysroot=/opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/cortexa7hf-neon-poky-linux-gnueabi</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>修改2</strong></p>
-<p>#如果只指定–sysroot但不指定架构参数，编译器会用默认的 ARM 架构（如 armv5）编译，而 NXP i.MX6&#x2F;7 是 Cortex-A7（armv7-a）硬浮点架构，编译出的代码会和设备的 CPU 不兼容（比如指令集错误），甚至链接时出现隐性报错。</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-march=armv7-a -mfpu=neon -mfloat-abi=hard -mtune=cortex-a7</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>修改3</strong></p>
-<p>彻底移除了-static参数，改用「动态编译」：<br>动态编译只需要链接「动态 C 库（libc.so）」，而 NXP 的 sysroot 中默认包含libc.so，链接器能直接找到；<br>动态编译是 NXP i.MX 设备的「标配方式」（原厂根文件系统自带动态库环境），无需额外补充静态库，避开了最棘手的静态库缺失问题。</p>
-<p><strong>make</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make clean</span><br><span class="line">make</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>验证</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#验证</span><br><span class="line">file boa</span><br><span class="line">#正确输出应包含：ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV)...（ARM 架构）。</span><br></pre></td></tr></table></figure></div>
+			<h2 id="网关测试"><a href="#网关测试" class="headerlink" title="网关测试"></a>网关测试</h2><h3 id="1-1交叉工具链解压缩"><a href="#1-1交叉工具链解压缩" class="headerlink" title="1.1交叉工具链解压缩"></a>1.1交叉工具链解压缩</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf .....</span><br></pre></td></tr></table></figure></div>
 
 
 
-<h3 id="2-2修改boa-conf"><a href="#2-2修改boa-conf" class="headerlink" title="2.2修改boa.conf"></a>2.2修改boa.conf</h3><p>对比之前在VMware Linux系统时的文件，只需要把下面<strong>取消</strong>注释</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ServerName www.your.org.here</span><br></pre></td></tr></table></figure></div>
+<h2 id="1-2-安装新版-32-位兼容库"><a href="#1-2-安装新版-32-位兼容库" class="headerlink" title="1.2 安装新版 32 位兼容库"></a>1.2 安装新版 32 位兼容库</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 1. 先启用32位架构支持（新版Ubuntu默认关闭）</span><br><span class="line">sudo dpkg --add-architecture i386</span><br><span class="line"></span><br><span class="line"># 2. 更新源（加载32位包信息）</span><br><span class="line">sudo apt update</span><br><span class="line"></span><br><span class="line"># 3. 安装新版32位库（替换lib32ncurses5为lib32ncurses6）</span><br><span class="line">sudo apt install -y lib32z1 lib32ncurses6 lib32stdc++6 libc6-i386</span><br></pre></td></tr></table></figure></div>
 
-<p>或（<strong>下面更佳</strong>）</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ServerName 192.168.2.232</span><br></pre></td></tr></table></figure></div>
 
-<p>没有<code>ServerName</code>就会报错<br>gethostbyname:: Resource temporarily unavailable</p>
-<p>boa源码对ServerName配置解析留有容错，所以 <a class="link"   target="_blank" rel="noopener" href="http://www.your.org.here/" >www.your.org.here<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> 的解析失败任然可以正常运行。</p>
-<h3 id="2-3编译cgi"><a href="#2-3编译cgi" class="headerlink" title="2.3编译cgi"></a>2.3编译cgi</h3><p><strong>方法一</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$CC odify_rc_local.c -o modify_rc_local.cgi</span><br></pre></td></tr></table></figure></div>
 
-<p><strong>方法二</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SYSROOT_PATH=/opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/cortexa7hf-neon-poky-linux-gnueabi</span><br><span class="line">zz@zz-virtual-machine:~/boaWork/www/cgi-bin$ sudo /opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/x86_64-pokysdk-linux/usr/bin/arm-poky-linux-gnueabi/arm-poky-linux-gnueabi-gcc \</span><br><span class="line">--sysroot=$SYSROOT_PATH \</span><br><span class="line">-march=armv7-a -mtune=cortex-a7 -mfpu=neon -mfloat-abi=hard \</span><br><span class="line">modify_rc_local.c -o modify_rc_local.cgi</span><br></pre></td></tr></table></figure></div>
+<h3 id="1-3-执行交叉编译命令"><a href="#1-3-执行交叉编译命令" class="headerlink" title="1.3 执行交叉编译命令"></a>1.3 执行交叉编译命令</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 1. 先验证编译器能否运行</span><br><span class="line">/home/bianyuan/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-gcc -v</span><br><span class="line"></span><br><span class="line"># 2. 编译测试程序（加-static，嵌入式必加）</span><br><span class="line">/home/bianyuan/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-gcc -o test test.c -static</span><br></pre></td></tr></table></figure></div>
 
-<h3 id="上面命令执行说明"><a href="#上面命令执行说明" class="headerlink" title="上面命令执行说明"></a>上面命令执行说明</h3><ol>
-<li>先定义 <code>SYSROOT_PATH</code> 变量，指向包含 ARM 架构头文件的 sysroot 目录，避免手动输入长路径出错；</li>
-<li><code>--sysroot</code> 参数强制编译器从该目录查找 <code>stdio.h</code> 等标准头文件，而非主机 x86 系统的 <code>/usr/include</code>；</li>
-<li><code>-march</code>&#x2F;<code>-mtune</code> 等参数是适配 i.MX6ULL（Cortex-A7 内核）的最优编译参数，确保生成的 CGI 程序能在目标板上正常运行</li>
-</ol>
-<h2 id="3-移植文件"><a href="#3-移植文件" class="headerlink" title="3 移植文件"></a>3 移植文件</h2><p>三个文件夹： boa log www</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\USERS\ADMINISTRATOR\DESKTOP\BOAWORK</span><br><span class="line">├─boa</span><br><span class="line">├─log</span><br><span class="line">└─www</span><br><span class="line">    └─cgi-bin</span><br></pre></td></tr></table></figure></div>
 
-<p><strong>boa</strong>是<strong>交叉编译器</strong>生成</p>
-<p>boa.conf直接移动</p>
-<p>boa_indexer直接移动，此文件与目录结构有关</p>
-<p>log下的文件直接移动</p>
-<p><strong>cgi-bin</strong>下的cgi文件<strong>交叉编译器</strong>生成</p>
-<h2 id="4-嵌入式设备启动服务"><a href="#4-嵌入式设备启动服务" class="headerlink" title="4 嵌入式设备启动服务"></a>4 嵌入式设备启动服务</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./boa</span><br></pre></td></tr></table></figure></div>
 
-<p>出现错误<br>gethostbyname:: Resource temporarily unavailable</p>
-<p>说明是权限问题</p>
-<p>cgi文件权限要给足</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 xxx.cgi</span><br></pre></td></tr></table></figure></div>
+<p>移植文件到边缘网关设备并执行</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup /home/test &gt; /home/test.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure></div>
+
+
+
+
+
+<h2 id="2-ssh连接慢"><a href="#2-ssh连接慢" class="headerlink" title="2 ssh连接慢"></a>2 ssh连接慢</h2><h3 id="2-1-sleep进程"><a href="#2-1-sleep进程" class="headerlink" title="2.1 sleep进程"></a>2.1 sleep进程</h3><p>通过ps -ef指令发现有两个进程”sleep 10”，找到文件&#x2F;etc&#x2F;init.d&#x2F;S91timeSync</p>
+<p>连接阿里云，进行时间校准。</p>
+<p>注释了 sleep 10这一行</p>
+<h3 id="2-2-修改sshd-config"><a href="#2-2-修改sshd-config" class="headerlink" title="2.2 修改sshd_config"></a>2.2 修改sshd_config</h3><p><strong>&#x2F;usr&#x2F;local&#x2F;sshd_config</strong></p>
+<p><strong>&#x2F;usr&#x2F;local&#x2F;etc&#x2F;sshd_config</strong></p>
+<p>只关闭 DNS 反向解析，其他一样</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 1. 关闭 DNS 反向解析（最关键！）</span><br><span class="line">UseDNS no  //源文件此处为yes</span><br><span class="line"></span><br><span class="line"># 2. 关闭 GSSAPI 认证</span><br><span class="line">GSSAPIAuthentication no</span><br><span class="line"></span><br><span class="line"># 3. 可选：缩短登录超时时间（不影响速度，但减少等待感）</span><br><span class="line">LoginGraceTime 10s</span><br><span class="line"></span><br><span class="line"># 4. 可选：禁用 PAM 认证（嵌入式通常不用）</span><br><span class="line">UsePAM no</span><br></pre></td></tr></table></figure></div>
+
+
+
+
 
 
 		</div>
@@ -507,23 +475,11 @@
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2026/02/27/2026/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">2026</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2026/02/26/5%20%E5%85%B3%E4%BA%8Ecgi%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/">
+				<a class="next" rel="next" href="/2026/03/13/9%20%E7%A7%BB%E6%A4%8D%E5%88%B0%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%AE%BE%E5%A4%87/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">关于cgi的一些思考</span>
+						<span class="post-nav-title-item truncate max-w-48">移植到嵌入式设备中</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -544,8 +500,8 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">Boa+cgic在嵌入式设备应用</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%89%8D%E8%A8%80"><span class="nav-text">1 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91"><span class="nav-text">2 交叉编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E7%BC%96%E8%AF%91boa"><span class="nav-text">2.1 编译boa</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2%E4%BF%AE%E6%94%B9boa-conf"><span class="nav-text">2.2修改boa.conf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3%E7%BC%96%E8%AF%91cgi"><span class="nav-text">2.3编译cgi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E9%9D%A2%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E8%AF%B4%E6%98%8E"><span class="nav-text">上面命令执行说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%A7%BB%E6%A4%8D%E6%96%87%E4%BB%B6"><span class="nav-text">3 移植文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%AE%BE%E5%A4%87%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1"><span class="nav-text">4 嵌入式设备启动服务</span></a></li></ol>
+		<div class="page-title">边缘网关测试</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E5%85%B3%E6%B5%8B%E8%AF%95"><span class="nav-text">网关测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1%E4%BA%A4%E5%8F%89%E5%B7%A5%E5%85%B7%E9%93%BE%E8%A7%A3%E5%8E%8B%E7%BC%A9"><span class="nav-text">1.1交叉工具链解压缩</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%AE%89%E8%A3%85%E6%96%B0%E7%89%88-32-%E4%BD%8D%E5%85%BC%E5%AE%B9%E5%BA%93"><span class="nav-text">1.2 安装新版 32 位兼容库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%89%A7%E8%A1%8C%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%91%BD%E4%BB%A4"><span class="nav-text">1.3 执行交叉编译命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ssh%E8%BF%9E%E6%8E%A5%E6%85%A2"><span class="nav-text">2 ssh连接慢</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-sleep%E8%BF%9B%E7%A8%8B"><span class="nav-text">2.1 sleep进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E4%BF%AE%E6%94%B9sshd-config"><span class="nav-text">2.2 修改sshd_config</span></a></li></ol></li></ol>
 
 	</div>
 </div>
