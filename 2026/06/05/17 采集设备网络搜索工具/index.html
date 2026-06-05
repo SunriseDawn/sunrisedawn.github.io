@@ -77,7 +77,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://sunrisedawn.github.io/2026/02/26/5 关于cgi的一些思考/"/>
+    <link rel="canonical" href="https://sunrisedawn.github.io/2026/06/05/17 采集设备网络搜索工具/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -87,16 +87,16 @@
         
         <meta name="description" content="dawn&#39;s blog">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于cgi的一些思考">
-<meta property="og:url" content="https://sunrisedawn.github.io/2026/02/26/5%20%E5%85%B3%E4%BA%8Ecgi%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/index.html">
+<meta property="og:title" content="采集设备网络搜索工具">
+<meta property="og:url" content="https://sunrisedawn.github.io/2026/06/05/17%20%E9%87%87%E9%9B%86%E8%AE%BE%E5%A4%87%E7%BD%91%E7%BB%9C%E6%90%9C%E7%B4%A2%E5%B7%A5%E5%85%B7/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="dawn&#39;s blog">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sunrisedawn.github.io/images/baizz.jpg">
-<meta property="article:published_time" content="2026-02-26T02:11:55.245Z">
-<meta property="article:modified_time" content="2026-02-28T06:31:32.511Z">
+<meta property="article:published_time" content="2026-06-05T06:12:02.942Z">
+<meta property="article:modified_time" content="2026-06-05T06:14:27.931Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="思考">
+<meta property="article:tag" content="教程">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sunrisedawn.github.io/images/baizz.jpg">
     
@@ -110,7 +110,7 @@
     
     <title>
         
-            关于cgi的一些思考 | dawn&#39;s blog
+            采集设备网络搜索工具 | dawn&#39;s blog
         
     </title>
 
@@ -373,7 +373,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">关于cgi的一些思考</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">采集设备网络搜索工具</h1>
 			</div>
 			
 		</div>
@@ -392,15 +392,15 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2026-02-26 10:11:55</span>
-        <span class="mobile">2026-02-26 10:11:55</span>
+        <span class="desktop">2026-06-05 14:12:02</span>
+        <span class="mobile">2026-06-05 14:12:02</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-02-28 14:31:32</span>
-            <span class="mobile">2026-02-28 14:31:32</span>
+            <span class="desktop">2026-06-05 14:14:27</span>
+            <span class="mobile">2026-06-05 14:14:27</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -412,7 +412,7 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/%E6%80%9D%E8%80%83/">思考</a>&nbsp;
+                        <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
                     </li>
                 
             </ul>
@@ -434,22 +434,7 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h2 id="1-CGI"><a href="#1-CGI" class="headerlink" title="1 CGI"></a>1 CGI</h2><p>通用网关接口：<strong>Common Gateway Interface</strong></p>
-<p>CGI 的工作模式 ：CGI 是 Web 服务器（Apache&#x2F;Nginx）和自定义程序（C&#x2F;C++&#x2F;Python 写的）之间的通信协议。</p>
-<p><strong>环境变量</strong>是这个协议里约定的<strong>标准通信方式</strong>。</p>
-<h3 id="1-1-Gateway"><a href="#1-1-Gateway" class="headerlink" title="1.1 Gateway"></a>1.1 Gateway</h3><p>网关：协议翻译机。</p>
-<p>网关两端是不同的协议</p>
-<h3 id="1-2-输入输出"><a href="#1-2-输入输出" class="headerlink" title="1.2 输入输出"></a>1.2 输入输出</h3><p>用户浏览器url请求如下：</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.73.128/cgi-bin/modify_rc_local.cgi</span><br></pre></td></tr></table></figure></div>
-
-<p>此时在Web服务器调用modify_rc_local.cgi之前，会把各类HTTP请求中的信息以<strong>环境变量</strong>的方式写入OS。</p>
-<p>CGI程序本质是OS上一个普通的可执行程序，它通过语言本身库函数来获取环境变量，从而获得数据输入。</p>
-<p>CGI输出数据：</p>
-<p>CGI本身只要向标准输出写入数据即可。</p>
-<p>规则：必须先输出<strong>「HTTP 响应头」</strong>，响应头和响应体之间必须用「空行<strong>\n\n</strong>」分隔。</p>
-<h3 id="1-3-CGI缺点"><a href="#1-3-CGI缺点" class="headerlink" title="1.3 CGI缺点"></a>1.3 CGI缺点</h3><p>fork-and-execute</p>
-<p><strong>进程级开销，性能极低（无法高并发）</strong></p>
-<p><strong>CGI机制：Web 服务器每收到一个 HTTP 请求，就会新建一个独立的进程来运行 CGI 程序，请求处理完成后，进程就被销毁。</strong></p>
+			<h1 id="1-网络搜索工具"><a href="#1-网络搜索工具" class="headerlink" title="1.网络搜索工具"></a>1.网络搜索工具</h1><p>类似于海康的sadp工具，使用udp发现设备</p>
 
 		</div>
 
@@ -459,7 +444,7 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/%E6%80%9D%E8%80%83/">#思考</a>&nbsp;
+				<a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>&nbsp;
 			</li>
 			
 		</ul>
@@ -470,23 +455,11 @@
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2026/02/26/6%20Boa+cgic%E5%9C%A8%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%AE%BE%E5%A4%87%E5%BA%94%E7%94%A8/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">Boa+cgic在嵌入式设备应用</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2026/02/25/4%20Boa+cgic%E7%9A%84linux%E5%BA%94%E7%94%A8/">
+				<a class="next" rel="next" href="/2026/05/21/16%20QT%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%851/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">Boa+cgic的linux应用</span>
+						<span class="post-nav-title-item truncate max-w-48">QT学习之旅1</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -507,8 +480,8 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">关于cgi的一些思考</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-CGI"><span class="nav-text">1 CGI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Gateway"><span class="nav-text">1.1 Gateway</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA"><span class="nav-text">1.2 输入输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-CGI%E7%BC%BA%E7%82%B9"><span class="nav-text">1.3 CGI缺点</span></a></li></ol></li></ol>
+		<div class="page-title">采集设备网络搜索工具</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%BD%91%E7%BB%9C%E6%90%9C%E7%B4%A2%E5%B7%A5%E5%85%B7"><span class="nav-text">1.网络搜索工具</span></a></li></ol>
 
 	</div>
 </div>
