@@ -98,9 +98,8 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/baizz.jpg">
 <meta property="article:published_time" content="2026-04-22T09:19:14.612Z">
-<meta property="article:modified_time" content="2026-04-27T06:44:15.730Z">
+<meta property="article:modified_time" content="2026-07-08T08:52:42.080Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="教程">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/baizz.jpg">
     
@@ -367,11 +366,11 @@
 
         <div class="statistics flex justify-around my-2.5">
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
         <div class="label text-third-text-color text-sm">Tags</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
@@ -424,24 +423,29 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-27 14:44:15</span>
-            <span class="mobile">2026-04-27 14:44:15</span>
+            <span class="desktop">2026-07-08 16:52:42</span>
+            <span class="mobile">2026-07-08 16:52:42</span>
             <span class="hover-info">Updated</span>
         </span>
     
 
     
-    
-        <span class="article-tags article-meta-item">
-            <i class="fa-regular fa-tags"></i>&nbsp;
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
             <ul>
                 
-                    <li>
-                        <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
-                    </li>
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
+                        </li>
+                    
+                    
                 
             </ul>
         </span>
+    
     
 
     
@@ -484,19 +488,10 @@
 <h2 id="4-网关设备启动流程-使用中"><a href="#4-网关设备启动流程-使用中" class="headerlink" title="4 网关设备启动流程(使用中)"></a>4 网关设备启动流程(使用中)</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Linux内核启动</span><br><span class="line">↓</span><br><span class="line">挂载根文件系统</span><br><span class="line">↓</span><br><span class="line">启动1号进程：/sbin/init</span><br><span class="line">↓</span><br><span class="line">读取核心配置：/etc/inittab</span><br><span class="line">↓</span><br><span class="line">1. 系统初始化：/etc/init.d/rcS</span><br><span class="line">↓</span><br><span class="line">2. 运行基础服务脚本：/etc/rc.d/rc</span><br><span class="line">↓</span><br><span class="line">3. 外部自定义优先脚本：/mnt/info/user.sh（存在就优先执行）</span><br><span class="line">↓</span><br><span class="line">4. 最终业务自启：/etc/rc.d/rc.local</span><br><span class="line">↓</span><br><span class="line">系统就绪、串口终端待命、业务程序常驻运行</span><br></pre></td></tr></table></figure></div>
 
 
-
 		</div>
 
 		
 
-		
-		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
-			
-			<li class="tag-item mx-0.5">
-				<a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>&nbsp;
-			</li>
-			
-		</ul>
 		
 
 		
