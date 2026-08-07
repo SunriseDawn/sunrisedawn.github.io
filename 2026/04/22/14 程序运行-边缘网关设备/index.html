@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="dawn">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://sunrisedawn.github.io/2026/04/22/14 程序运行-边缘网关设备/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="dawn&#39;s blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="程序运行-边缘网关设备">
+<meta property="og:url" content="https://sunrisedawn.github.io/2026/04/22/14%20%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C-%E8%BE%B9%E7%BC%98%E7%BD%91%E5%85%B3%E8%AE%BE%E5%A4%87/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="dawn&#39;s blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/baizz.jpg">
+<meta property="article:published_time" content="2026-04-22T09:19:14.612Z">
+<meta property="article:modified_time" content="2026-07-08T08:52:42.080Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/baizz.jpg">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/linboli.jpg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/linboli.jpg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/linboli.jpg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            程序运行-边缘网关设备 | dawn&#39;s blog
+        
+    </title>
+
+    <link rel="stylesheet" href="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+        <script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/libs/anime.min.js" ></script>
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"sunrisedawn.github.io","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":false,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":false,"site_pv":false,"site_uv":false,"post_pv":false},"single_page":true,"preloader":{"enable":true,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/baizz.jpg","description":"dawn's blog"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/image/Jewel_4k.jpg","dark":"https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/image/fengling.jpg"},"title":" ","subtitle":{"text":[],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"one last kiss","artist":"宇多田光","url":"https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/music/One%20Last%20Kiss.mp3","cover":"https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/music/olk.jpg","lrc":"https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/music/One%20Last%20Kiss.lrc"}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"主页":{"path":"/","icon":"fa-regular fa-house"},"分类":{"icon":"fa-solid fa-folder","path":"/categories/"},"图库":{"icon":"fa-solid fa-image","path":"/masonry/"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"cloud"},"home":{"sidebar":{"enable":false,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":true};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        dawn&#39;s blog
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({ loop: true })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [20, 0],
+                translateZ: 0,
+                opacity: [0, 1],
+                filter: ['blur(5px)', 'blur(0px)'],
+                easing: "easeOutExpo",
+                duration: 1200,
+                delay: (el, i) => 300 + 20 * i,
+            })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [0, -20],
+                opacity: [1, 0],
+                filter: ['blur(0px)', 'blur(5px)'],
+                easing: "easeInExpo",
+                duration: 1000,
+                delay: (el, i) => 15 * i,
+                complete: function() {
+                    hidePreloader();
+                }
+            }, '-=700');
+
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                dawn&#39;s blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    主页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/"
+                                        >
+                                    <i class="fa-solid fa-folder fa-fw"></i>
+                                    分类
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/masonry/"
+                                        >
+                                    <i class="fa-solid fa-image fa-fw"></i>
+                                    图库
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                主页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/"
+                        >
+                            <span>
+                                分类
+                            </span>
+                            
+                                <i class="fa-solid fa-folder fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/masonry/"
+                        >
+                            <span>
+                                图库
+                            </span>
+                            
+                                <i class="fa-solid fa-image fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">19</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">程序运行-边缘网关设备</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/linboli.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">dawn</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-04-22 17:19:14</span>
+        <span class="mobile">2026-04-22 17:19:14</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-07-08 16:52:42</span>
+            <span class="mobile">2026-07-08 16:52:42</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+    
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h2 id="1-采集仪程序"><a href="#1-采集仪程序" class="headerlink" title="1. 采集仪程序"></a>1. 采集仪程序</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#将库文件sqlite3和curl的lib文件拷贝到编译主机的 /opt/fsl-imx-x11/4.1.15-2.0.0/sysroots/cortexa7hf-neon-poky-linux-gnueabi/lib</span><br><span class="line"></span><br><span class="line">我的libcurl是4.7.0版本</span><br><span class="line">#创建软连接 ln -s libcurl.so.4.8.0 libcurl.so</span><br><span class="line">#创建软连接 ln -s libcurl.so.4.x.x libcurl.so.4</span><br></pre></td></tr></table></figure></div>
+
+<p>交叉工具链环境</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">. /opt/fsl-imx-x11/4.1.15-2.0.0/environment-setup-cortexa7hf-neon-poky-linux-gnueabi</span><br></pre></td></tr></table></figure></div>
+
+<p>对原有cjy工程的CmakeList.txt 进行配置</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">添加交叉编译环境的库路径（利用已设置的环境变量 SDKTARGETSYSROOT）</span><br><span class="line">位置在target_link_libraries前面</span><br><span class="line"></span><br><span class="line">if(DEFINED ENV&#123;SDKTARGETSYSROOT&#125;)</span><br><span class="line">    link_directories($ENV&#123;SDKTARGETSYSROOT&#125;/usr/lib)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure></div>
+
+<p>创建一个build2文件，在里面运行</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmake ..</span><br><span class="line">make</span><br></pre></td></tr></table></figure></div>
+
+<p>最后得到可执行的<strong>client</strong>文件</p>
+<h2 id="2-研智设备-rootfs文件"><a href="#2-研智设备-rootfs文件" class="headerlink" title="2.研智设备-rootfs文件"></a>2.研智设备-rootfs文件</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">1. 上电启动</span><br><span class="line">   ↓</span><br><span class="line">2. BootROM → U-Boot 引导</span><br><span class="line">   ↓</span><br><span class="line">3. Linux 内核启动</span><br><span class="line">   ↓</span><br><span class="line">4. 内核启动第一个用户程序：/sbin/init</span><br><span class="line">   ↓</span><br><span class="line">5. init 读取 /etc/inittab 配置</span><br><span class="line">   ├─ 挂载 /proc、重新挂载根目录为可读写</span><br><span class="line">   ├─ 挂载 /etc/fstab 所有分区</span><br><span class="line">   ├─ 设置主机名 /etc/hostname</span><br><span class="line">   ├─ 启动 sshd（respawn 守护）</span><br><span class="line">   ├─ 启动 ntpd 时间服务（respawn 守护）</span><br><span class="line">   └─ 执行系统初始化脚本：/etc/init.d/rcS</span><br><span class="line">         ↓</span><br><span class="line">6. rcS 遍历执行 /etc/init.d/S??* （按数字顺序）</span><br><span class="line">   ├─ S10mdev          设备管理器，创建设备节点</span><br><span class="line">   ├─ S20urandom       初始化随机数种子</span><br><span class="line">   ├─ S30dbus          启动系统消息总线</span><br><span class="line">   ├─ S35iptables      加载防火墙规则</span><br><span class="line">   ├─ S40network       启动网卡、配置IP</span><br><span class="line">   ├─ S50proftpd       FTP 服务（已注释，不执行）</span><br><span class="line">   ├─ S90autorun.sh    【用户核心自定义脚本】</span><br><span class="line">   │    ├─ 输出高电平 GPIO128 → 打开显示屏电源</span><br><span class="line">   │    ├─ 自动扫描、挂载 U 盘到 /media/xxx</span><br><span class="line">   │    ├─ 若 U 盘有 rtics_init_factory.sh 则执行</span><br><span class="line">   │    └─ 执行 /project/auto_run.sh</span><br><span class="line">   ├─ S91timeSync      联网同步阿里云 NTP 时间 → 写入硬件时钟</span><br><span class="line">   └─ S99rc.local      执行 /etc/rc.local</span><br><span class="line">            ↓</span><br><span class="line">7. /etc/rc.local（系统最后一步）</span><br><span class="line">   ├─ 后台运行 /opt/board/board_start.sh 【板级硬件初始化】</span><br><span class="line">   │    ├─ 启动 eth0、eth1 双网口</span><br><span class="line">   │    ├─ 操作 GPIO5 先低后高（模块复位/上电）</span><br><span class="line">   │    ├─ 启动 utelnetd 远程登录服务</span><br><span class="line">   │    ├─ 锁定 /etc/resolv.conf 防止 DNS 被改</span><br><span class="line">   │    ├─ 启动 4G 模块管理脚本</span><br><span class="line">   │    ├─ 启动 WiFi 模块配置脚本</span><br><span class="line">   │    ├─ 启动按键检测脚本</span><br><span class="line">   │    ├─ 配置 RTC 时钟</span><br><span class="line">   │    ├─ 创建串口别名 ttyCOM1~COM8 对应 ttymxcx</span><br><span class="line">   │    └─ 检测 U 盘 update.sh，有则执行自动升级</span><br><span class="line">   │</span><br><span class="line">   └─ 后台运行 /opt/app/app_start.sh 【产品应用主程序】</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="3-crontabs文件"><a href="#3-crontabs文件" class="headerlink" title="3.crontabs文件"></a>3.crontabs文件</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 1. 创建 crontab 目录</span><br><span class="line">mkdir -p /var/spool/cron/crontabs</span><br><span class="line"></span><br><span class="line"># 2. 编辑用户（root）的定时任务文件</span><br><span class="line">vi /var/spool/cron/crontabs/root</span><br><span class="line"># 写入任务内容：</span><br><span class="line"># */5 * * * *  bash /usr/app/app.sh  &gt;/dev/null 2&gt;&amp;1</span><br><span class="line"># */10 * * * *  bash /usr/app/jk.sh  &gt;/dev/null 2&gt;&amp;1</span><br><span class="line"># 30 1 * * *  /sbin/reboot</span><br><span class="line"># */5 * * * *  bash /usr/app/zd/app.sh  &gt;/dev/null 2&gt;&amp;1</span><br><span class="line"># */5 * * * *  (ntpdate -u ntp1.aliyun.com)&amp;&amp;(hwclock -w)</span><br><span class="line"></span><br><span class="line"># 3. 设置权限为 400</span><br><span class="line">chmod 400 /var/spool/cron/crontabs/root</span><br><span class="line"></span><br><span class="line"># 4. 启动 crond 服务</span><br><span class="line">/usr/sbin/crond</span><br><span class="line"></span><br><span class="line"># 5. 验证</span><br><span class="line">ps -eo comm,etime,pid | grep crond</span><br><span class="line">crontab -l</span><br></pre></td></tr></table></figure></div>
+
+
+
+
+
+<h2 id="4-网关设备启动流程-使用中"><a href="#4-网关设备启动流程-使用中" class="headerlink" title="4 网关设备启动流程(使用中)"></a>4 网关设备启动流程(使用中)</h2><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Linux内核启动</span><br><span class="line">↓</span><br><span class="line">挂载根文件系统</span><br><span class="line">↓</span><br><span class="line">启动1号进程：/sbin/init</span><br><span class="line">↓</span><br><span class="line">读取核心配置：/etc/inittab</span><br><span class="line">↓</span><br><span class="line">1. 系统初始化：/etc/init.d/rcS</span><br><span class="line">↓</span><br><span class="line">2. 运行基础服务脚本：/etc/rc.d/rc</span><br><span class="line">↓</span><br><span class="line">3. 外部自定义优先脚本：/mnt/info/user.sh（存在就优先执行）</span><br><span class="line">↓</span><br><span class="line">4. 最终业务自启：/etc/rc.d/rc.local</span><br><span class="line">↓</span><br><span class="line">系统就绪、串口终端待命、业务程序常驻运行</span><br></pre></td></tr></table></figure></div>
+
+
+		</div>
+
+		
+
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2026/05/09/15%20%E6%97%A5%E8%AE%B01/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">日寄1</span>
+						<span class="post-nav-item">Prev posts</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/03/31/13%20RamDisk%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">RamDisk</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">程序运行-边缘网关设备</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%87%87%E9%9B%86%E4%BB%AA%E7%A8%8B%E5%BA%8F"><span class="nav-text">1. 采集仪程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%A0%94%E6%99%BA%E8%AE%BE%E5%A4%87-rootfs%E6%96%87%E4%BB%B6"><span class="nav-text">2.研智设备-rootfs文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-crontabs%E6%96%87%E4%BB%B6"><span class="nav-text">3.crontabs文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%BD%91%E5%85%B3%E8%AE%BE%E5%A4%87%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B-%E4%BD%BF%E7%94%A8%E4%B8%AD"><span class="nav-text">4 网关设备启动流程(使用中)</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+		
+
+    
+		
+		
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+
+</main>
+
+
+<script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/libs/Swup.min.js" ></script><script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	<script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/tools/imageViewer.js" ></script><script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/utils.js" ></script><script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/main.js" ></script><script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/layouts/navbarShrink.js" ></script><script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/tools/scrollTopBottom.js" ></script><script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/tools/lightDarkSwitch.js" ></script><script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/layouts/categoryList.js" ></script>
+
+
+
+
+    <script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/tools/codeBlock.js" ></script>
+
+
+
+    <script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/layouts/lazyload.js" ></script>
+
+
+
+
+
+  <script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/libs/Typed.min.js" ></script>
+  <script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/plugins/typed.js" ></script>
+
+
+
+
+
+    <script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/libs/minimasonry.min.js" ></script>
+    <script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/plugins/masonry.js" ></script>
+
+
+
+
+
+
+    <script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/tools/tocToggle.js" data-swup-reload-script></script><script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/layouts/toc.js" data-swup-reload-script></script><script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/plugins/tabs.js" data-swup-reload-script></script>
+
+
+<script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+<script type="module" src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/layouts/essays.js" data-swup-reload-script></script>
+
+
+
+
+	
+	<div id="aplayer"></div>
+<script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/libs/APlayer.min.js" ></script>
+<script  src="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/js/build/plugins/aplayer.js" ></script>
+
+	
+</body>
+
+</html>
