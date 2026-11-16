@@ -97,8 +97,8 @@
 <meta property="og:description" content="dawn&#39;s blog">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/baizz.jpg">
-<meta property="article:published_time" content="2026-05-09T09:49:10.000Z">
-<meta property="article:modified_time" content="2026-11-16T06:16:09.445Z">
+<meta property="article:published_time" content="2026-05-09T09:05:23.647Z">
+<meta property="article:modified_time" content="2026-11-16T06:30:48.464Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/baizz.jpg">
@@ -130,15 +130,24 @@
             
                 
                     @media screen and (max-width: 768px) {
+  /* 强制在移动端显示 APlayer */
   .aplayer {
     display: block !important;
   }
+  /* 强制展开折叠状态的播放器主体 */
   .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
     left: 0 !important;
   }
+  /* 调整播放器整体位置与宽度，避免紧贴屏幕边缘 */
   .aplayer.aplayer-fixed {
-    left: 10px !important;
-    bottom: 10px !important;
+    max-width: 90% !important;
+    left: 5% !important;
+    bottom: 15px !important;
+  }
+  /* 增大控制按钮的点击区域，更适合手指点按 */
+  .aplayer .aplayer-icon {
+    width: 24px !important;
+    height: 24px !important;
   }
 }
 
@@ -448,15 +457,15 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2026-05-09 17:49:10</span>
-        <span class="mobile">2026-05-09 17:49:10</span>
+        <span class="desktop">2026-05-09 17:05:23</span>
+        <span class="mobile">2026-05-09 17:05:23</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-11-16 14:16:09</span>
-            <span class="mobile">2026-11-16 14:16:09</span>
+            <span class="desktop">2026-11-16 14:30:48</span>
+            <span class="mobile">2026-11-16 14:30:48</span>
             <span class="hover-info">Updated</span>
         </span>
     
