@@ -136,32 +136,64 @@
     display: block !important;
   }
 
-  /* --- 2. 播放器宽度与位置（贴左调整）--- */
+  /* --- 2. 播放器宽度与位置（贴左）--- */
   .aplayer.aplayer-fixed,
   .aplayer.aplayer-fixed .aplayer-body {
-    max-width: 85% !important; /* 宽度保持 85%，可按需再调小 */
+    max-width: 85% !important;
     width: auto !important;
   }
   .aplayer.aplayer-fixed {
-    left: 2px !important;   /* 关键：改为贴左，数值越小越靠左 */
+    left: 8px !important;
     right: auto !important;
-    bottom: 15px !important; /* 垂直位置不变 */
+    bottom: 15px !important;
   }
 
-  /* --- 3. 强制展开 narrow 状态，并与上面 left 保持一致 --- */
+  /* --- 3. 强制展开 narrow 状态，与上面 left 保持一致 --- */
   .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
-    left: 8px !important;   /* 必须与上面的 left 相同，避免跳动 */
+    left: 8px !important;
   }
 
-  /* --- 4. 触摸目标与图标尺寸 --- */
-  .aplayer .aplayer-icon {
-    width: 26px !important;
-    height: 26px !important;
+  /* --- 4. 图标尺寸：区分主控按钮与底部小图标 --- */
+  .aplayer.aplayer-fixed .aplayer-pic .aplayer-button {
+    width: 28px !important;
+    height: 28px !important;
   }
-  .aplayer-icon-back, .aplayer-icon-play,
-  .aplayer-icon-forward, .aplayer-icon-menu {
-    width: 22px !important;
-    height: 22px !important;
+  .aplayer.aplayer-fixed .aplayer-controller .aplayer-icon {
+    width: 17px !important;
+    height: 17px !important;
+    margin: 0 3px !important;
+  }
+  /* 移动端隐藏音量条，省横向空间 */
+  .aplayer.aplayer-fixed .aplayer-volume-wrap {
+    display: none !important;
+  }
+
+  /* --- 4.1 主体面板内部间距，缓解拥挤 --- */
+  .aplayer.aplayer-fixed .aplayer-pic {
+    width: 56px !important;
+    height: 56px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-music {
+    padding: 6px 10px 0 10px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-title {
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-author {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    margin-top: 2px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-controller {
+    padding: 0 8px !important;
+    margin-top: 3px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-bar-wrap {
+    margin: 0 4px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-time {
+    font-size: 10px !important;
   }
 
   /* --- 5. 点击反馈（按下态）--- */
