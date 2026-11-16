@@ -128,21 +128,23 @@
             
                 
                     @media screen and (max-width: 768px) {
-  /* 强制在移动端显示 APlayer */
+  /* 强制显示 */
   .aplayer {
     display: block !important;
   }
-  /* 强制展开折叠状态的播放器主体 */
-  .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+  /* 强制展开 narrow 状态（两种模式共用 aplayer-narrow 类） */
+  .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body,
+  .aplayer.aplayer-mini.aplayer-narrow .aplayer-body {
     left: 0 !important;
   }
-  /* 调整播放器整体位置与宽度，避免紧贴屏幕边缘 */
-  .aplayer.aplayer-fixed {
+  /* 位置与宽度调整，同时匹配 fixed 和 mini */
+  .aplayer.aplayer-fixed,
+  .aplayer.aplayer-mini {
     max-width: 90% !important;
     left: 5% !important;
     bottom: 15px !important;
   }
-  /* 增大控制按钮的点击区域，更适合手指点按 */
+  /* 增大按钮 */
   .aplayer .aplayer-icon {
     width: 24px !important;
     height: 24px !important;
