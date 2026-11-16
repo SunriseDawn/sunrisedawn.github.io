@@ -139,26 +139,49 @@
             
                 
                     @media screen and (max-width: 768px) {
-  /* 强制显示 */
+  /* --- 1. 强制显示 & 基础重置 --- */
   .aplayer {
     display: block !important;
   }
-  /* 强制展开 narrow 状态（两种模式共用 aplayer-narrow 类） */
-  .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body,
-  .aplayer.aplayer-mini.aplayer-narrow .aplayer-body {
-    left: 0 !important;
-  }
-  /* 位置与宽度调整，同时匹配 fixed 和 mini */
+
+  /* --- 2. 收窄播放器宽度（核心调整）--- */
   .aplayer.aplayer-fixed,
-  .aplayer.aplayer-mini {
-    max-width: 90% !important;
-    left: 5% !important;
+  .aplayer.aplayer-fixed .aplayer-body {
+    max-width: 85% !important; /* 收窄到屏幕宽度的 85% */
+    width: auto !important; /* 让宽度由 max-width 约束 */
+  }
+  .aplayer.aplayer-fixed {
+    left: 7.5% !important; /* (100% - 85%) / 2，使其居中 */
+    right: auto !important;
     bottom: 15px !important;
   }
-  /* 增大按钮 */
+
+  /* --- 3. 强制展开 narrow 状态（fixed 模式）--- */
+  .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+    left: 7.5% !important; /* 与上面居中规则保持一致 */
+  }
+
+  /* --- 4. 触摸目标与图标尺寸 --- */
   .aplayer .aplayer-icon {
-    width: 24px !important;
-    height: 24px !important;
+    width: 26px !important; /* 稍微增大，更易点按 */
+    height: 26px !important;
+  }
+  .aplayer-icon-back, .aplayer-icon-play,
+  .aplayer-icon-forward, .aplayer-icon-menu {
+    width: 22px !important; /* 控制按钮本身稍小一点，留出间距 */
+    height: 22px !important;
+  }
+
+  /* --- 5. 点击反馈（按下态）--- */
+  .aplayer .aplayer-icon:active {
+    transform: scale(0.92); /* 按下时轻微缩小 */
+    opacity: 0.8;
+  }
+
+  /* --- 6. 播放列表高度限制 --- */
+  .aplayer.aplayer-fixed .aplayer-list {
+    max-height: 35vh !important; /* 限制列表高度，避免占满屏幕 */
+    overflow-y: auto !important;
   }
 }
 
