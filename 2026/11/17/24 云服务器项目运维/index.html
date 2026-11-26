@@ -98,7 +98,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/baizz.jpg">
 <meta property="article:published_time" content="2026-11-17T02:38:27.509Z">
-<meta property="article:modified_time" content="2026-11-25T03:05:43.746Z">
+<meta property="article:modified_time" content="2026-11-26T01:14:52.171Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sunrisedawn.oss-cn-hangzhou.aliyuncs.com/hexo-theme-redefine/2.8.5/source/images/baizz.jpg">
@@ -556,8 +556,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-11-25 11:05:43</span>
-            <span class="mobile">2026-11-25 11:05:43</span>
+            <span class="desktop">2026-11-26 09:14:52</span>
+            <span class="mobile">2026-11-26 09:14:52</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -698,7 +698,7 @@
 <h3 id="5-9-磁盘占用"><a href="#5-9-磁盘占用" class="headerlink" title="5.9 磁盘占用"></a>5.9 磁盘占用</h3><div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">du</span> -sh data/logs/*.<span class="built_in">log</span> data/alarm.db</span><br><span class="line"><span class="built_in">df</span> -h /data</span><br></pre></td></tr></table></figure></div>
 
 <p>上限：<code>icc.log</code> 30 MB、<code>console.log</code> 180 MB、<code>alarm.db</code> 按指令量增长（一条约 120 字节，可忽略）。</p>
-<h3 id="5-10-iccctl脚本-设备情况"><a href="#5-10-iccctl脚本-设备情况" class="headerlink" title="5.10 iccctl脚本-设备情况"></a>5.10 iccctl脚本-设备情况</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">systemctl is-active ankang-alarm                    # active</span><br><span class="line">./iccctl status                     # 先确认服务活着、MQTT 连着</span><br><span class="line">./iccctl devices                    # 拿设备 ID</span><br><span class="line">./iccctl siren                      # 7 台声光一张表</span><br><span class="line">./iccctl siren ankang-siren-01 --live   # 读这一台的真实音量</span><br><span class="line">./iccctl volume ankang-siren-01 30      # 设音量</span><br><span class="line">./iccctl send ankang-siren-01 on        # 起播（现在会顺带把音量设回 30）</span><br><span class="line">./iccctl cmds 5                     # 看最近几条指令成没成功</span><br><span class="line"></span><br><span class="line">cd /data/self/ankang-cloud/ankang_alarm</span><br><span class="line"># K7+950</span><br><span class="line">./iccctl send ankang-siren-01 on</span><br><span class="line"></span><br><span class="line">cd /data/self/ankang-cloud/ankang_alarm &amp;&amp; ./iccctl send ankang-siren-01 on</span><br></pre></td></tr></table></figure></div>
+<h3 id="5-10-iccctl脚本-设备情况"><a href="#5-10-iccctl脚本-设备情况" class="headerlink" title="5.10 iccctl脚本-设备情况"></a>5.10 iccctl脚本-设备情况</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">systemctl is-active ankang-alarm                    # active</span><br><span class="line">./iccctl status                     # 先确认服务活着、MQTT 连着</span><br><span class="line">./iccctl devices                    # 拿设备 ID</span><br><span class="line">./iccctl siren                      # 7 台声光一张表</span><br><span class="line">./iccctl siren ankang-siren-01 --live   # 读这一台的真实音量</span><br><span class="line">./iccctl volume ankang-siren-01 30      # 设音量</span><br><span class="line">./iccctl send ankang-siren-01 on        # 起播（现在会顺带把音量设回 30）</span><br><span class="line">./iccctl cmds 5                     # 看最近几条指令成没成功</span><br><span class="line"></span><br><span class="line">cd /data/self/ankang-cloud/ankang_alarm</span><br><span class="line"># K7+950</span><br><span class="line">./iccctl send ankang-siren-01 on</span><br><span class="line">#快速启动K7+950</span><br><span class="line">cd /data/self/ankang-cloud/ankang_alarm &amp;&amp; ./iccctl send ankang-siren-01 on</span><br></pre></td></tr></table></figure></div>
 
 <p><code>iccctl</code> 目前有 8 个命令，其中 6 个只读，2 个会实际改动设备：</p>
 <table>
